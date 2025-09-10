@@ -35,6 +35,13 @@ std::ostream& operator<<(std::ostream& os, const T& proto) {
     return os << proto.DebugString();
 }
 
+// Lightweight operator<< for std::pair to support simple debug logging
+template <typename A, typename B>
+inline std::ostream& operator<<(std::ostream& os, const std::pair<A, B>& p) {
+    os << "(" << p.first << ", " << p.second << ")";
+    return os;
+}
+
 // functional predicate, with grabbing packet timestamp
 template<typename TPacketContentsType, typename TReportPredicate, bool TPrintTimestamp = false>
 inline absl::Status GetPacketContentsIfAny(

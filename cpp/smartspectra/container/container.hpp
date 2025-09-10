@@ -73,7 +73,7 @@ public:
     /**
      * Set callback invoked whenever the preprocessing status changes.
      */
-    absl::Status SetOnStatusChange(const std::function<absl::Status(physiology::StatusCode)>& on_status_change);
+    absl::Status SetOnStatusChange(const std::function<absl::Status(physiology::StatusValue)>& on_status_change);
 
     absl::Status SetOnEdgeMetricsOutput(
         const std::function<absl::Status(const physiology::Metrics&)>& on_edge_metrics_output
@@ -139,8 +139,8 @@ protected:
 // == fixed/static after initialization
 
     // if needed, set to a callback that handles preprocessing status changes
-    std::function<absl::Status(physiology::StatusCode)> OnStatusChange =
-        [](physiology::StatusCode status_code) { return absl::OkStatus(); };
+    std::function<absl::Status(physiology::StatusValue)> OnStatusChange =
+        [](physiology::StatusValue status) { return absl::OkStatus(); };
 
     // if needed, set to a callback that handles new metrics output from edge / local processing
     std::function<absl::Status(const physiology::Metrics&)> OnEdgeMetricsOutput =
@@ -167,7 +167,7 @@ protected:
     bool initialized = false;
     bool running = false;
 // == dynamic/changing during runtime
-    physiology::StatusCode status_code = physiology::StatusCode::PROCESSING_NOT_STARTED;
+    physiology::StatusValue status;
     bool recording = false;
 
     // for video output (optional)

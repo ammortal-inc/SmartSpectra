@@ -9,11 +9,6 @@
 #import <Foundation/Foundation.h>
 #import <CoreVideo/CoreVideo.h>
 #import <AVFoundation/AVFoundation.h>
-#ifdef PRESAGE_PREPROCESSING_BUILD
-#import "modules/messages/Status.pbobjc.h"
-#else
-#import "Status.pbobjc.h"
-#endif
 
 typedef NS_ENUM(NSInteger, PresageMode) {
     PresageModeSpot,
@@ -37,8 +32,9 @@ typedef NS_ENUM(NSInteger, PresageServer) {
 - (void)frameDidUpdate:(PresagePreprocessing *)tracker
   didOutputPixelBuffer:(CVPixelBufferRef)pixelBuffer;
 
-- (void)statusCodeChanged:(PresagePreprocessing *)tracker
-               statusCode:(StatusCode)statusCode;
+// Serialized StatusValue proto for Swift consumers
+- (void)statusBufferChanged:(PresagePreprocessing *)tracker
+             serializedBytes:(NSData *)data;
 
 - (void)metricsBufferChanged:(PresagePreprocessing *)tracker
                serializedBytes:(NSData *)data;
@@ -73,7 +69,12 @@ typedef NS_ENUM(NSInteger, PresageServer) {
 - (void)start;
 - (void)stop;
 - (void)buttonStateChangedInFramework:(BOOL)isRecording;
-- (NSString * _Nonnull)getStatusHint:(StatusCode)statusCode;
+// Returns a human-readable hint string for a given status code value.
+// The value must match presage.physiology.StatusCode numeric values.
+- (NSString * _Nonnull)getStatusHintFromCodeValue:(NSInteger)codeValue;
+// Returns a human-readable description string for a given status code value.
+// The value must match presage.physiology.StatusCode numeric values.
+- (NSString * _Nonnull)getStatusDescriptionFromCodeValue:(NSInteger)codeValue;
 - (void)setCameraPosition:(AVCaptureDevicePosition)cameraPosition;
 - (void)setMode:(PresageMode)mode;
 - (void)setSpotDuration:(double)spotDuration;

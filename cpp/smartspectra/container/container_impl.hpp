@@ -21,7 +21,7 @@
 #pragma once
 // === standard library includes (if any) ===
 // === configuration header ===
-#include "configuration.h"
+#include "configuration.hpp"
 // === third-party includes (if any) ===
 #include <mediapipe/framework/port/logging.h>
 #include <mediapipe/framework/port/opencv_core_inc.h>
@@ -53,7 +53,11 @@ Container<TDeviceType, TOperationMode, TIntegrationMode>::Container(Container::S
     settings(std::move(settings)),
     graph(),
     device_context(),
-    operation_context(settings.operation) {};
+    operation_context(settings.operation),
+    status(physiology::BuildStatusValue(physiology::StatusCode::PROCESSING_NOT_STARTED,
+           std::chrono::duration_cast<std::chrono::microseconds>(
+               std::chrono::system_clock::now().time_since_epoch()).count()
+           )){};
 
 
 template<
@@ -129,7 +133,7 @@ template<
     settings::IntegrationMode TIntegrationMode
 >
 absl::Status Container<TDeviceType, TOperationMode, TIntegrationMode>::SetOnStatusChange(
-    const std::function<absl::Status(physiology::StatusCode)>& on_status_change
+    const std::function<absl::Status(physiology::StatusValue)>& on_status_change
 ) {
     MP_RETURN_IF_ERROR(CheckCallbackNotNull(on_status_change));
     this->OnStatusChange = on_status_change;
@@ -208,11 +212,11 @@ template<
     settings::IntegrationMode TIntegrationMode
 >
 void Container<TDeviceType, TOperationMode, TIntegrationMode>::AddFrameTimestampToBenchmarkingInfo(const mediapipe::Timestamp& timestamp) {
-    if (this->OnCorePerformanceTelemetry.has_value() & this->recording) {
+    if (this->OnCorePerformanceTelemetry.has_value() && this->recording) {
         // Calculate the offset of frame capture time from system time
         if (!offset_from_system_time.has_value()) {
             double current_system_seconds =
-                std::chrono::duration<double>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+                std::chrono::duration<double>(std::chrono::system_clock::now().time_since_epoch()).count();
             offset_from_system_time = current_system_seconds - timestamp.Seconds();
         }
         this->frames_in_graph_timestamps.insert(timestamp.Value());
@@ -236,7 +240,7 @@ absl::Status Container<TDeviceType, TOperationMode, TIntegrationMode>::ComputeCo
 ) {
     if (this->OnCorePerformanceTelemetry.has_value()) {
         double current_system_seconds =
-            std::chrono::duration<double>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+            std::chrono::duration<double>(std::chrono::system_clock::now().time_since_epoch()).count();
 
         auto last_buffer_input_timestamp = metrics_buffer.metadata().frame_timestamp();
         auto last_buffer_input_timestamp_location =

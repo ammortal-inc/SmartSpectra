@@ -12,6 +12,7 @@
 #include <physiology/modules/configuration.h>
 #include <physiology/modules/messages/metrics.h>
 #include <smartspectra/container/settings.hpp>
+#include <smartspectra/container/configuration.hpp>
 #include <smartspectra/video_source/camera/camera.hpp>
 #include <smartspectra/container/foreground_container.hpp>
 #include <smartspectra/gui/opencv_hud.hpp>
@@ -94,6 +95,11 @@ ABSL_FLAG(int, verbosity, 1, "Verbosity level -- raise to print more.");
 ABSL_FLAG(std::string, api_key, "",
           "API key to use for the Physiology online service. "
           "If not provided, final features and/or metrics are not retrieved.");
+#ifdef ENABLE_CUSTOM_SERVER
+ABSL_FLAG(std::string, continuous_server_url, "",
+          "Custom continuous server URL to use instead of the default Physiology service. "
+          "If not provided, uses the default Physiology service.");
+#endif
 // endregion ===========================================================================================================
 // region ======================== CONTINUOUS-MODE SETTINGS ============================================================
 ABSL_FLAG(double, buffer_duration, 0.2,
@@ -232,8 +238,9 @@ absl::Status RunRestContinuousEdge(
     presage::physiology::Metrics accumulated_metrics;
 
 
-    MP_RETURN_IF_ERROR(container.SetOnStatusChange([](presage::physiology::StatusCode status_code) -> absl::Status {
-        std::cout << "Imaging status: " << presage::physiology::GetStatusDescription(status_code) << std::endl;
+    MP_RETURN_IF_ERROR(container.SetOnStatusChange([](presage::physiology::StatusValue status) -> absl::Status {
+        std::cout << "Imaging status: " << presage::physiology::GetStatusDescription(status.value())
+        << " for frame with timestamp " << status.timestamp() << std::endl;
         return absl::OkStatus();
     }));
 
@@ -499,6 +506,11 @@ int main(int argc, char** argv) {
         },
         settings::RestSettings{
             absl::GetFlag(FLAGS_api_key),
+#ifdef ENABLE_CUSTOM_SERVER
+            absl::GetFlag(FLAGS_continuous_server_url).empty() ? 
+                std::optional<std::string>() : 
+                std::optional<std::string>(absl::GetFlag(FLAGS_continuous_server_url))
+#endif
         }
     };
 

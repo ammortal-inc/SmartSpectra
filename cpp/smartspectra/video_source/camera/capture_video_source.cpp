@@ -227,7 +227,9 @@ int64_t CaptureCameraSource::GetFrameTimestamp() const {
                                             :
            static_cast<int64_t>(
                std::chrono::duration_cast<std::chrono::microseconds>(
-                   std::chrono::high_resolution_clock::now().time_since_epoch()
+                   // can't use chrono::high_resolution_clock::now()
+                   // because time_since_epoch won't yield absolute time on macOS and/or Clang
+                std::chrono::system_clock::now().time_since_epoch()
                ).count() - microsecond_epoch_at_start
            );
 }

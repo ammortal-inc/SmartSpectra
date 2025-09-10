@@ -277,6 +277,16 @@ public final class StatusProto {
      * @return The value.
      */
     com.presage.physiology.proto.StatusProto.StatusCode getValue();
+
+    /**
+     * <pre>
+     ** A frame timestamp, in absolute microseconds since the Unix epoch, associated with the status code 
+     * </pre>
+     *
+     * <code>int64 timestamp = 2;</code>
+     * @return The timestamp.
+     */
+    long getTimestamp();
   }
   /**
    * <pre>
@@ -354,6 +364,44 @@ public final class StatusProto {
     private void clearValue() {
       
       value_ = 0;
+    }
+
+    public static final int TIMESTAMP_FIELD_NUMBER = 2;
+    private long timestamp_;
+    /**
+     * <pre>
+     ** A frame timestamp, in absolute microseconds since the Unix epoch, associated with the status code 
+     * </pre>
+     *
+     * <code>int64 timestamp = 2;</code>
+     * @return The timestamp.
+     */
+    @java.lang.Override
+    public long getTimestamp() {
+      return timestamp_;
+    }
+    /**
+     * <pre>
+     ** A frame timestamp, in absolute microseconds since the Unix epoch, associated with the status code 
+     * </pre>
+     *
+     * <code>int64 timestamp = 2;</code>
+     * @param value The timestamp to set.
+     */
+    private void setTimestamp(long value) {
+      
+      timestamp_ = value;
+    }
+    /**
+     * <pre>
+     ** A frame timestamp, in absolute microseconds since the Unix epoch, associated with the status code 
+     * </pre>
+     *
+     * <code>int64 timestamp = 2;</code>
+     */
+    private void clearTimestamp() {
+      
+      timestamp_ = 0L;
     }
 
     public static com.presage.physiology.proto.StatusProto.StatusValue parseFrom(
@@ -523,6 +571,46 @@ public final class StatusProto {
         return this;
       }
 
+      /**
+       * <pre>
+       ** A frame timestamp, in absolute microseconds since the Unix epoch, associated with the status code 
+       * </pre>
+       *
+       * <code>int64 timestamp = 2;</code>
+       * @return The timestamp.
+       */
+      @java.lang.Override
+      public long getTimestamp() {
+        return instance.getTimestamp();
+      }
+      /**
+       * <pre>
+       ** A frame timestamp, in absolute microseconds since the Unix epoch, associated with the status code 
+       * </pre>
+       *
+       * <code>int64 timestamp = 2;</code>
+       * @param value The timestamp to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTimestamp(long value) {
+        copyOnWrite();
+        instance.setTimestamp(value);
+        return this;
+      }
+      /**
+       * <pre>
+       ** A frame timestamp, in absolute microseconds since the Unix epoch, associated with the status code 
+       * </pre>
+       *
+       * <code>int64 timestamp = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearTimestamp() {
+        copyOnWrite();
+        instance.clearTimestamp();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:presage.physiology.StatusValue)
     }
     @java.lang.Override
@@ -540,9 +628,11 @@ public final class StatusProto {
         case BUILD_MESSAGE_INFO: {
             java.lang.Object[] objects = new java.lang.Object[] {
               "value_",
+              "timestamp_",
             };
             java.lang.String info =
-                "\u0000\u0001\u0000\u0000\u0001\u0001\u0001\u0000\u0000\u0000\u0001\f";
+                "\u0000\u0002\u0000\u0000\u0001\u0002\u0002\u0000\u0000\u0000\u0001\f\u0002\u0002" +
+                "";
             return newMessageInfo(DEFAULT_INSTANCE, info, objects);
         }
         // fall through

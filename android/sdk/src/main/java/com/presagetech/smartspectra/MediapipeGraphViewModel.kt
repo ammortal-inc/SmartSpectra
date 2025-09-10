@@ -102,6 +102,14 @@ internal class MediapipeGraphViewModel private constructor(context: Context) : V
      * Loads the MediaPipe graph and configures all input/output streams.
      */
     private fun loadGraphAndResources(context: Context) {
+        val apiKey = try {
+            viewModel.getApiKey()
+        } catch (e: IllegalStateException) {
+            Timber.e("ERROR: API key missing - cannot proceed with processing: ${e.localizedMessage}")
+            _processingState.postValue(ProcessingStatus.ERROR)
+            return
+        }
+
         eglManager = EglManager(null)
         processor = FrameProcessor(
             context,
@@ -121,7 +129,7 @@ internal class MediapipeGraphViewModel private constructor(context: Context) : V
                 USE_FULL_POSE_LANDMARKS_SIDE_PACKET_NAME to it.packetCreator.createBool(SmartSpectraSdkConfig.useFullLandmarks),
                 ENABLE_POSE_LANDMARK_SEGMENTATION_SIDE_PACKET_NAME to it.packetCreator.createBool(SmartSpectraSdkConfig.enableLandmarkSegmentation),
                 // TODO: currently always need to set because of some graph changes. only set it for api key based auth once the graph is fixed
-                API_KEY_SIDE_PACKET_NAME to it.packetCreator.createString(viewModel.getApiKey()),
+                API_KEY_SIDE_PACKET_NAME to it.packetCreator.createString(apiKey),
                 PREPROCESSED_DATA_BUFFER_DURATION_PACKET_NAME to it.packetCreator.createFloat64(SmartSpectraSdkConfig.preprocessedDataBufferDuration),
                 SAVE_ROI_IMAGE to it.packetCreator.createBool(SmartSpectraSdkConfig.save_roi_image),
             ))

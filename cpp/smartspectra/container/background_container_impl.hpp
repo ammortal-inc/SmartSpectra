@@ -81,9 +81,9 @@ absl::Status BackgroundContainer<TDeviceType, TOperationMode, TIntegrationMode>:
         pe::graph::output_streams::kStatusCode,
         [this](const mediapipe::Packet& status_packet) {
             if (!status_packet.IsEmpty()) {
-                physiology::StatusCode status = status_packet.Get<physiology::StatusValue>().value();
-                if (status != this->previous_status_code) {
-                    this->previous_status_code = status;
+                physiology::StatusValue status = status_packet.Get<physiology::StatusValue>();
+                if (status.value() != this->previous_status_code) {
+                    this->previous_status_code = status.value();
                     return this->OnStatusChange(status);
                 }
             }

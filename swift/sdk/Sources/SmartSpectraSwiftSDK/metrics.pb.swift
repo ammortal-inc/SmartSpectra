@@ -31,6 +31,8 @@ public struct Presage_Physiology_Measurement {
 
   public var stable: Bool = false
 
+  public var timestamp: Int64 = 0
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -46,6 +48,8 @@ public struct Presage_Physiology_DetectionStatus {
   public var detected: Bool = false
 
   public var stable: Bool = false
+
+  public var timestamp: Int64 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -65,6 +69,8 @@ public struct Presage_Physiology_MeasurementWithConfidence {
 
   public var confidence: Float = 0
 
+  public var timestamp: Int64 = 0
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -82,6 +88,8 @@ public struct Presage_Physiology_MicroExpression {
   public var stable: Bool = false
 
   public var confidence: Float = 0
+
+  public var timestamp: Int64 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -200,6 +208,8 @@ public struct Presage_Physiology_Landmarks {
   public var stable: Bool = false
 
   public var reset: Bool = false
+
+  public var timestamp: Int64 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -409,6 +419,7 @@ extension Presage_Physiology_Measurement: SwiftProtobuf.Message, SwiftProtobuf._
     1: .same(proto: "time"),
     2: .same(proto: "value"),
     3: .same(proto: "stable"),
+    4: .same(proto: "timestamp"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -420,6 +431,7 @@ extension Presage_Physiology_Measurement: SwiftProtobuf.Message, SwiftProtobuf._
       case 1: try { try decoder.decodeSingularFloatField(value: &self.time) }()
       case 2: try { try decoder.decodeSingularFloatField(value: &self.value) }()
       case 3: try { try decoder.decodeSingularBoolField(value: &self.stable) }()
+      case 4: try { try decoder.decodeSingularInt64Field(value: &self.timestamp) }()
       default: break
       }
     }
@@ -435,6 +447,9 @@ extension Presage_Physiology_Measurement: SwiftProtobuf.Message, SwiftProtobuf._
     if self.stable != false {
       try visitor.visitSingularBoolField(value: self.stable, fieldNumber: 3)
     }
+    if self.timestamp != 0 {
+      try visitor.visitSingularInt64Field(value: self.timestamp, fieldNumber: 4)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -442,6 +457,7 @@ extension Presage_Physiology_Measurement: SwiftProtobuf.Message, SwiftProtobuf._
     if lhs.time != rhs.time {return false}
     if lhs.value != rhs.value {return false}
     if lhs.stable != rhs.stable {return false}
+    if lhs.timestamp != rhs.timestamp {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -453,6 +469,7 @@ extension Presage_Physiology_DetectionStatus: SwiftProtobuf.Message, SwiftProtob
     1: .same(proto: "time"),
     2: .same(proto: "detected"),
     3: .same(proto: "stable"),
+    4: .same(proto: "timestamp"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -464,6 +481,7 @@ extension Presage_Physiology_DetectionStatus: SwiftProtobuf.Message, SwiftProtob
       case 1: try { try decoder.decodeSingularFloatField(value: &self.time) }()
       case 2: try { try decoder.decodeSingularBoolField(value: &self.detected) }()
       case 3: try { try decoder.decodeSingularBoolField(value: &self.stable) }()
+      case 4: try { try decoder.decodeSingularInt64Field(value: &self.timestamp) }()
       default: break
       }
     }
@@ -479,6 +497,9 @@ extension Presage_Physiology_DetectionStatus: SwiftProtobuf.Message, SwiftProtob
     if self.stable != false {
       try visitor.visitSingularBoolField(value: self.stable, fieldNumber: 3)
     }
+    if self.timestamp != 0 {
+      try visitor.visitSingularInt64Field(value: self.timestamp, fieldNumber: 4)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -486,6 +507,7 @@ extension Presage_Physiology_DetectionStatus: SwiftProtobuf.Message, SwiftProtob
     if lhs.time != rhs.time {return false}
     if lhs.detected != rhs.detected {return false}
     if lhs.stable != rhs.stable {return false}
+    if lhs.timestamp != rhs.timestamp {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -498,6 +520,7 @@ extension Presage_Physiology_MeasurementWithConfidence: SwiftProtobuf.Message, S
     2: .same(proto: "value"),
     3: .same(proto: "stable"),
     4: .same(proto: "confidence"),
+    5: .same(proto: "timestamp"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -510,6 +533,7 @@ extension Presage_Physiology_MeasurementWithConfidence: SwiftProtobuf.Message, S
       case 2: try { try decoder.decodeSingularFloatField(value: &self.value) }()
       case 3: try { try decoder.decodeSingularBoolField(value: &self.stable) }()
       case 4: try { try decoder.decodeSingularFloatField(value: &self.confidence) }()
+      case 5: try { try decoder.decodeSingularInt64Field(value: &self.timestamp) }()
       default: break
       }
     }
@@ -528,6 +552,9 @@ extension Presage_Physiology_MeasurementWithConfidence: SwiftProtobuf.Message, S
     if self.confidence != 0 {
       try visitor.visitSingularFloatField(value: self.confidence, fieldNumber: 4)
     }
+    if self.timestamp != 0 {
+      try visitor.visitSingularInt64Field(value: self.timestamp, fieldNumber: 5)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -536,6 +563,7 @@ extension Presage_Physiology_MeasurementWithConfidence: SwiftProtobuf.Message, S
     if lhs.value != rhs.value {return false}
     if lhs.stable != rhs.stable {return false}
     if lhs.confidence != rhs.confidence {return false}
+    if lhs.timestamp != rhs.timestamp {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -548,6 +576,7 @@ extension Presage_Physiology_MicroExpression: SwiftProtobuf.Message, SwiftProtob
     2: .same(proto: "expression"),
     3: .same(proto: "stable"),
     4: .same(proto: "confidence"),
+    5: .same(proto: "timestamp"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -560,6 +589,7 @@ extension Presage_Physiology_MicroExpression: SwiftProtobuf.Message, SwiftProtob
       case 2: try { try decoder.decodeSingularStringField(value: &self.expression) }()
       case 3: try { try decoder.decodeSingularBoolField(value: &self.stable) }()
       case 4: try { try decoder.decodeSingularFloatField(value: &self.confidence) }()
+      case 5: try { try decoder.decodeSingularInt64Field(value: &self.timestamp) }()
       default: break
       }
     }
@@ -578,6 +608,9 @@ extension Presage_Physiology_MicroExpression: SwiftProtobuf.Message, SwiftProtob
     if self.confidence != 0 {
       try visitor.visitSingularFloatField(value: self.confidence, fieldNumber: 4)
     }
+    if self.timestamp != 0 {
+      try visitor.visitSingularInt64Field(value: self.timestamp, fieldNumber: 5)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -586,6 +619,7 @@ extension Presage_Physiology_MicroExpression: SwiftProtobuf.Message, SwiftProtob
     if lhs.expression != rhs.expression {return false}
     if lhs.stable != rhs.stable {return false}
     if lhs.confidence != rhs.confidence {return false}
+    if lhs.timestamp != rhs.timestamp {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -832,6 +866,7 @@ extension Presage_Physiology_Landmarks: SwiftProtobuf.Message, SwiftProtobuf._Me
     2: .same(proto: "value"),
     3: .same(proto: "stable"),
     4: .same(proto: "reset"),
+    5: .same(proto: "timestamp"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -844,6 +879,7 @@ extension Presage_Physiology_Landmarks: SwiftProtobuf.Message, SwiftProtobuf._Me
       case 2: try { try decoder.decodeRepeatedMessageField(value: &self.value) }()
       case 3: try { try decoder.decodeSingularBoolField(value: &self.stable) }()
       case 4: try { try decoder.decodeSingularBoolField(value: &self.reset) }()
+      case 5: try { try decoder.decodeSingularInt64Field(value: &self.timestamp) }()
       default: break
       }
     }
@@ -862,6 +898,9 @@ extension Presage_Physiology_Landmarks: SwiftProtobuf.Message, SwiftProtobuf._Me
     if self.reset != false {
       try visitor.visitSingularBoolField(value: self.reset, fieldNumber: 4)
     }
+    if self.timestamp != 0 {
+      try visitor.visitSingularInt64Field(value: self.timestamp, fieldNumber: 5)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -870,6 +909,7 @@ extension Presage_Physiology_Landmarks: SwiftProtobuf.Message, SwiftProtobuf._Me
     if lhs.value != rhs.value {return false}
     if lhs.stable != rhs.stable {return false}
     if lhs.reset != rhs.reset {return false}
+    if lhs.timestamp != rhs.timestamp {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

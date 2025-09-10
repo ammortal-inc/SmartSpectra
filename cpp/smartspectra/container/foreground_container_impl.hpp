@@ -343,10 +343,10 @@ absl::Status ForegroundContainer<TDeviceType, TOperationMode, TIntegrationMode>:
             ));
 
             if (got_status_code_packet){
-                this->status_code = status_value.value();
-                if (this->status_code != previous_status_code) {
-                    MP_RETURN_IF_ERROR(this->OnStatusChange(this->status_code));
-                    previous_status_code = this->status_code;
+                this->status = status_value;
+                if (this->status.value() != previous_status_code) {
+                    MP_RETURN_IF_ERROR(this->OnStatusChange(this->status));
+                    previous_status_code = this->status.value();
                 }
             }
 
@@ -379,7 +379,7 @@ absl::Status ForegroundContainer<TDeviceType, TOperationMode, TIntegrationMode>:
                 if (!this->load_video) {
                     // if we loaded video, that means we started recording already.
                     // Otherwise, start recording iff status code is OK
-                    if (!this->recording && this->status_code == physiology::StatusCode::OK) {
+                    if (!this->recording && this->status.value() == physiology::StatusCode::OK) {
                         if (this->settings.video_source.auto_lock && this->video_source->SupportsExposureControls()) {
                             return this->video_source->TurnOffAutoExposure();
                         }
@@ -390,8 +390,8 @@ absl::Status ForegroundContainer<TDeviceType, TOperationMode, TIntegrationMode>:
                 std::this_thread::sleep_for(std::chrono::milliseconds(this->settings.interframe_delay_ms));
             } else {
                 MP_RETURN_IF_ERROR(keys::HandleKeyboardInput(
-                    this->keep_grabbing_frames, this->recording, *(this->video_source), this->settings,
-                    this->status_code, frame_timestamp));
+                    this->keep_grabbing_frames, this->recording, *(this->video_source), this->settings, this->status
+                ));
             }
         }
 

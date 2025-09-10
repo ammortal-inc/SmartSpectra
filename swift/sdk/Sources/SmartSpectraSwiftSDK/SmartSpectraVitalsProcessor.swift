@@ -170,7 +170,13 @@ public class SmartSpectraVitalsProcessor: NSObject, ObservableObject {
         let oauth_enabled  = authHandler?.isOauthEnabled ?? false
 
         if !oauth_enabled {
-            guard let apiKey = sdk.config.apiKey, !apiKey.isEmpty else { fatalError("API key missing") }
+            guard let apiKey = sdk.config.apiKey, !apiKey.isEmpty else {
+                print("ERROR: API key missing - cannot proceed with processing")
+                DispatchQueue.main.async {
+                    self.processingStatus = .error
+                }
+                return
+            }
             setApiKey(apiKey)
         }
 
@@ -275,20 +281,24 @@ extension SmartSpectraVitalsProcessor: PresagePreprocessingDelegate {
         // TODO: figure out if we need to keep this or remove it
     }
 
-    /// Delegate callback reporting status changes from the preprocessing engine.
-    public func statusCodeChanged(_ tracker: PresagePreprocessing!, statusCode: StatusCode) {
-
-        if statusCode != lastStatusCode {
-            DispatchQueue.main.async {
-                self.lastStatusCode = statusCode
-                self.statusHint = tracker.getStatusHint(statusCode)
+    // Status delivered as serialized StatusValue protobuf for Swift consumers.
+    public func statusBufferChanged(_ tracker: PresagePreprocessing!, serializedBytes: Data) {
+        do {
+            let status = try Presage_Physiology_StatusValue(serializedBytes: serializedBytes)
+            let code: StatusCode = status.value
+            if code != lastStatusCode {
+                DispatchQueue.main.async {
+                    self.lastStatusCode = code
+                    self.statusHint = tracker.getStatusHint(fromCodeValue: Int(code.rawValue))
+                }
             }
+            if sdk.config.smartSpectraMode == .spot && sdk.config.showFps {
+                // update fps based on status code in spot mode
+                updateFps()
+            }
+        } catch {
+            print("Failed to deserialize StatusValue: \(error.localizedDescription)")
         }
-        if sdk.config.smartSpectraMode == .spot && sdk.config.showFps {
-            // update fps based on status code in spot mode
-            updateFps()
-        }
-
     }
 
     /// Delegate callback providing processed metrics.

@@ -9,6 +9,7 @@
 #include <mediapipe/framework/port/logging.h>
 // === local includes (if any) ===
 #include "keyboard_input.hpp"
+#include "modules/messages/status.h"
 
 
 namespace presage::smartspectra::container::keyboard_input {
@@ -20,8 +21,7 @@ absl::Status HandleKeyboardInput(
     bool& recording,
     video_source::VideoSource& v_source,
     const settings::GeneralSettings& settings,
-    StatusCode status_code,
-    int64_t timestamp
+    physiology::StatusValue status
 ) {
     const int pressed_key = cv::waitKey(settings.interframe_delay_ms);
     if (pressed_key != -1) {
@@ -37,13 +37,13 @@ absl::Status HandleKeyboardInput(
             case '=':
                 return v_source.IncreaseExposure();
             case 's':
-                if (status_code == StatusCode::OK || status_code == StatusCode::PROCESSING_NOT_STARTED) {
+                if (status.value() == StatusCode::OK || status.value() == StatusCode::PROCESSING_NOT_STARTED) {
                     recording = !recording;
                     LOG(INFO) << (
                         recording ?
-                        "====== Recording started after timestamp " + std::to_string(timestamp) + ". ======"
+                        "====== Recording started after timestamp " + std::to_string(status.timestamp()) + ". ======"
                                   :
-                        "====== Recording stopped after timestamp " + std::to_string(timestamp) + ". ======"
+                        "====== Recording stopped after timestamp " + std::to_string(status.timestamp()) + ". ======"
                     );
                     if (recording) {
                         // lock exposure when recording commences (if it's supported by this video source)
@@ -53,12 +53,13 @@ absl::Status HandleKeyboardInput(
                     } else {
                         // turn on auto-exposure after recording (if it's supported by this video source)
                         if (settings.video_source.auto_lock && v_source.SupportsExposureControls()) {
-                            auto auto_exposure_on_status = v_source.TurnOnAutoExposure();
                             return v_source.TurnOnAutoExposure();
                         }
                     }
                 } else {
-                    LOG(INFO) << "Not ready to start recording. Preprocessing input issue detected: " << status_code;
+                    LOG(INFO) << "Not ready to start recording. Preprocessing input issue detected: "
+                    << physiology::GetStatusDescription(status.value()) << ". Status code " << status.value()
+                    << " at timestamp " << status.timestamp() << ". " << physiology::GetStatusHint(status.value());
                 }
                 break;
             default:

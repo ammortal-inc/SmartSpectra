@@ -116,8 +116,9 @@ absl::Status RunRestSpotApp(
     bool save_to_disk = absl::GetFlag(FLAGS_save_metrics_to_disk);
     std::string output_directory = absl::GetFlag(FLAGS_output_directory);
 
-    MP_RETURN_IF_ERROR(container.SetOnStatusChange([](presage::physiology::StatusCode status_code) -> absl::Status {
-        std::cout << "Imaging status: " << presage::physiology::GetStatusDescription(status_code) << std::endl;
+    MP_RETURN_IF_ERROR(container.SetOnStatusChange([](presage::physiology::StatusValue status) -> absl::Status {
+        std::cout << "Imaging status: " << presage::physiology::GetStatusDescription(status.value())
+        << " for frame with timestamp " << status.timestamp() << std::endl;
         return absl::OkStatus();
     }));
 

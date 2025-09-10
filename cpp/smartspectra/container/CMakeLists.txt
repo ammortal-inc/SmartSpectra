@@ -34,6 +34,10 @@ set(LIBRARY_SOURCES
         settings.cpp
 )
 
+if (SMART_SPECTRA_LOCAL_BUILD)
+    list(APPEND LIBRARY_SOURCES custom_rest_settings.cpp)
+endif()
+
 set(LIBRARY_PRIVATE_HEADERS
         background_container_impl.hpp
         container_impl.hpp
@@ -46,14 +50,19 @@ set(LIBRARY_PRIVATE_HEADERS
         packet_helpers.hpp
         benchmarking.hpp
 
-        ${CMAKE_CURRENT_BINARY_DIR}/configuration.h
+        ${CMAKE_CURRENT_BINARY_DIR}/configuration.hpp
 )
+
+if (SMART_SPECTRA_LOCAL_BUILD)
+    list(APPEND LIBRARY_PRIVATE_HEADERS custom_rest_settings.hpp)
+endif()
 
 if (SMART_SPECTRA_LOCAL_BUILD)
     set(PHYSIOLOGY_EDGE_MODEL_DIRECTORY ${${PROJECT_NAME_UPPER}_PARENT_DIR}/edge/graph/models)
     set(PHYSIOLOGY_EDGE_GRAPH_DIRECTORY ${PHYSIOLOGY_EDGE_CPACKAGE_INSTALL_LOCATION}/share)
+    set(ENABLE_CUSTOM_SERVER ON)
 endif ()
-configure_file(configuration.hpp.in configuration.h)
+configure_file(configuration.hpp.in configuration.hpp)
 
 set(LIBRARY_PUBLIC_HEADERS
         container.hpp
@@ -71,6 +80,10 @@ target_sources(${LIBRARY_NAME}
         PRIVATE ${LIBRARY_SOURCES} ${LIBRARY_PRIVATE_HEADERS}
         PUBLIC FILE_SET HEADERS FILES ${LIBRARY_PUBLIC_HEADERS} BASE_DIRS ${PROJECT_SOURCE_DIR}
 )
+
+if (SMART_SPECTRA_LOCAL_BUILD)
+    target_sources(${LIBRARY_NAME} PRIVATE custom_rest_settings.cpp)
+endif ()
 
 target_include_directories(${LIBRARY_NAME} PUBLIC
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>

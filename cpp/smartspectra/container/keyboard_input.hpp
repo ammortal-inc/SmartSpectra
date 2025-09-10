@@ -38,8 +38,7 @@ absl::Status HandleKeyboardInput(
     bool& recording,
     video_source::VideoSource& v_source,
     const settings::GeneralSettings& settings,
-    physiology::StatusCode error_code,
-    int64_t timestamp
+    physiology::StatusValue status
 );
 
 

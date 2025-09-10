@@ -260,7 +260,7 @@ public extension ViewController.Screening {
         private func updateButtonState(for statusCode: StatusCode) {
             DispatchQueue.main.async {
                 // update button state
-                if statusCode != StatusCode.ok {
+                if statusCode != .ok {
                     self.buttonState = .disable
                 } else {
                     self.buttonState = self.isRecording ? .running : .ready

@@ -47,7 +47,7 @@ dependencyResolutionManagement {
 
 ```gradle
 dependencies {
-    implementation("com.presagetech:smartspectra:1.0.23")
+    implementation("com.presagetech:smartspectra:1.0.24")
 }
 ```
 
@@ -63,7 +63,7 @@ import com.presagetech.smartspectra.SmartSpectraSdk
 
 class MainActivity : AppCompatActivity() {
     private lateinit var smartSpectraView: SmartSpectraView
-    
+
     // Replace with your API key from https://physiology.presagetech.com
     private val smartSpectraSdk = SmartSpectraSdk.getInstance().apply {
         setApiKey("YOUR_API_KEY")
@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        
+
         smartSpectraView = findViewById(R.id.smart_spectra_view)
     }
 }
@@ -242,7 +242,7 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        // Required: JitPack repository for MPAndroidChart dependency  
+        // Required: JitPack repository for MPAndroidChart dependency
         maven { url 'https://jitpack.io' }
     }
 }
@@ -255,7 +255,7 @@ Add the SmartSpectra dependency to your app's `build.gradle` file:
 ```gradle
 android {
     compileSdk 34
-    
+
     defaultConfig {
         minSdk 26  // Required: SDK minimum version
         targetSdk 34
@@ -264,7 +264,7 @@ android {
 }
 
 dependencies {
-    implementation("com.presagetech:smartspectra:1.0.23")
+    implementation("com.presagetech:smartspectra:1.0.24")
 }
 ```
 

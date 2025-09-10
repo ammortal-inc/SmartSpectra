@@ -144,9 +144,6 @@ class SmartSpectraButton(context: Context, attrs: AttributeSet?) : LinearLayout(
      * agreements have been completed.
      */
     private fun onStartClicked(view: View) {
-        // TODO: Check if api key is set, this throws an error if it's not
-        smartSpectraSdk.getApiKey()
-
 
         val postAgreementActions: () -> Unit = {
             if(agreedToTermsOfService && agreedToPrivacyPolicy) {

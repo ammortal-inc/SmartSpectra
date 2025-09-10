@@ -14,13 +14,15 @@ public final class MetricsProto {
 
     /**
      * <pre>
-     ** Relative time of the measurement in seconds since start of recording 
+     ** Relative time of the measurement in seconds since start of recording (deprecated) 
      * </pre>
      *
-     * <code>float time = 1;</code>
+     * <code>float time = 1 [deprecated = true];</code>
+     * @deprecated presage.physiology.Measurement.time is deprecated.
+     *     See modules/messages/metrics.proto;l=15
      * @return The time.
      */
-    float getTime();
+    @java.lang.Deprecated float getTime();
 
     /**
      * <pre>
@@ -41,6 +43,16 @@ public final class MetricsProto {
      * @return The stable.
      */
     boolean getStable();
+
+    /**
+     * <pre>
+     ** Absolute timestamp at which the measurement was taken, in microseconds, since Linux epoch 
+     * </pre>
+     *
+     * <code>int64 timestamp = 4;</code>
+     * @return The timestamp.
+     */
+    long getTimestamp();
   }
   /**
    * <pre>
@@ -62,22 +74,26 @@ public final class MetricsProto {
     private float time_;
     /**
      * <pre>
-     ** Relative time of the measurement in seconds since start of recording 
+     ** Relative time of the measurement in seconds since start of recording (deprecated) 
      * </pre>
      *
-     * <code>float time = 1;</code>
+     * <code>float time = 1 [deprecated = true];</code>
+     * @deprecated presage.physiology.Measurement.time is deprecated.
+     *     See modules/messages/metrics.proto;l=15
      * @return The time.
      */
     @java.lang.Override
-    public float getTime() {
+    @java.lang.Deprecated public float getTime() {
       return time_;
     }
     /**
      * <pre>
-     ** Relative time of the measurement in seconds since start of recording 
+     ** Relative time of the measurement in seconds since start of recording (deprecated) 
      * </pre>
      *
-     * <code>float time = 1;</code>
+     * <code>float time = 1 [deprecated = true];</code>
+     * @deprecated presage.physiology.Measurement.time is deprecated.
+     *     See modules/messages/metrics.proto;l=15
      * @param value The time to set.
      */
     private void setTime(float value) {
@@ -86,10 +102,12 @@ public final class MetricsProto {
     }
     /**
      * <pre>
-     ** Relative time of the measurement in seconds since start of recording 
+     ** Relative time of the measurement in seconds since start of recording (deprecated) 
      * </pre>
      *
-     * <code>float time = 1;</code>
+     * <code>float time = 1 [deprecated = true];</code>
+     * @deprecated presage.physiology.Measurement.time is deprecated.
+     *     See modules/messages/metrics.proto;l=15
      */
     private void clearTime() {
       
@@ -170,6 +188,44 @@ public final class MetricsProto {
     private void clearStable() {
       
       stable_ = false;
+    }
+
+    public static final int TIMESTAMP_FIELD_NUMBER = 4;
+    private long timestamp_;
+    /**
+     * <pre>
+     ** Absolute timestamp at which the measurement was taken, in microseconds, since Linux epoch 
+     * </pre>
+     *
+     * <code>int64 timestamp = 4;</code>
+     * @return The timestamp.
+     */
+    @java.lang.Override
+    public long getTimestamp() {
+      return timestamp_;
+    }
+    /**
+     * <pre>
+     ** Absolute timestamp at which the measurement was taken, in microseconds, since Linux epoch 
+     * </pre>
+     *
+     * <code>int64 timestamp = 4;</code>
+     * @param value The timestamp to set.
+     */
+    private void setTimestamp(long value) {
+      
+      timestamp_ = value;
+    }
+    /**
+     * <pre>
+     ** Absolute timestamp at which the measurement was taken, in microseconds, since Linux epoch 
+     * </pre>
+     *
+     * <code>int64 timestamp = 4;</code>
+     */
+    private void clearTimestamp() {
+      
+      timestamp_ = 0L;
     }
 
     public static com.presage.physiology.proto.MetricsProto.Measurement parseFrom(
@@ -275,39 +331,45 @@ public final class MetricsProto {
 
       /**
        * <pre>
-       ** Relative time of the measurement in seconds since start of recording 
+       ** Relative time of the measurement in seconds since start of recording (deprecated) 
        * </pre>
        *
-       * <code>float time = 1;</code>
+       * <code>float time = 1 [deprecated = true];</code>
+       * @deprecated presage.physiology.Measurement.time is deprecated.
+       *     See modules/messages/metrics.proto;l=15
        * @return The time.
        */
       @java.lang.Override
-      public float getTime() {
+      @java.lang.Deprecated public float getTime() {
         return instance.getTime();
       }
       /**
        * <pre>
-       ** Relative time of the measurement in seconds since start of recording 
+       ** Relative time of the measurement in seconds since start of recording (deprecated) 
        * </pre>
        *
-       * <code>float time = 1;</code>
+       * <code>float time = 1 [deprecated = true];</code>
+       * @deprecated presage.physiology.Measurement.time is deprecated.
+       *     See modules/messages/metrics.proto;l=15
        * @param value The time to set.
        * @return This builder for chaining.
        */
-      public Builder setTime(float value) {
+      @java.lang.Deprecated public Builder setTime(float value) {
         copyOnWrite();
         instance.setTime(value);
         return this;
       }
       /**
        * <pre>
-       ** Relative time of the measurement in seconds since start of recording 
+       ** Relative time of the measurement in seconds since start of recording (deprecated) 
        * </pre>
        *
-       * <code>float time = 1;</code>
+       * <code>float time = 1 [deprecated = true];</code>
+       * @deprecated presage.physiology.Measurement.time is deprecated.
+       *     See modules/messages/metrics.proto;l=15
        * @return This builder for chaining.
        */
-      public Builder clearTime() {
+      @java.lang.Deprecated public Builder clearTime() {
         copyOnWrite();
         instance.clearTime();
         return this;
@@ -393,6 +455,46 @@ public final class MetricsProto {
         return this;
       }
 
+      /**
+       * <pre>
+       ** Absolute timestamp at which the measurement was taken, in microseconds, since Linux epoch 
+       * </pre>
+       *
+       * <code>int64 timestamp = 4;</code>
+       * @return The timestamp.
+       */
+      @java.lang.Override
+      public long getTimestamp() {
+        return instance.getTimestamp();
+      }
+      /**
+       * <pre>
+       ** Absolute timestamp at which the measurement was taken, in microseconds, since Linux epoch 
+       * </pre>
+       *
+       * <code>int64 timestamp = 4;</code>
+       * @param value The timestamp to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTimestamp(long value) {
+        copyOnWrite();
+        instance.setTimestamp(value);
+        return this;
+      }
+      /**
+       * <pre>
+       ** Absolute timestamp at which the measurement was taken, in microseconds, since Linux epoch 
+       * </pre>
+       *
+       * <code>int64 timestamp = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearTimestamp() {
+        copyOnWrite();
+        instance.clearTimestamp();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:presage.physiology.Measurement)
     }
     @java.lang.Override
@@ -412,10 +514,11 @@ public final class MetricsProto {
               "time_",
               "value_",
               "stable_",
+              "timestamp_",
             };
             java.lang.String info =
-                "\u0000\u0003\u0000\u0000\u0001\u0003\u0003\u0000\u0000\u0000\u0001\u0001\u0002\u0001" +
-                "\u0003\u0007";
+                "\u0000\u0004\u0000\u0000\u0001\u0004\u0004\u0000\u0000\u0000\u0001\u0001\u0002\u0001" +
+                "\u0003\u0007\u0004\u0002";
             return newMessageInfo(DEFAULT_INSTANCE, info, objects);
         }
         // fall through
@@ -476,13 +579,15 @@ public final class MetricsProto {
 
     /**
      * <pre>
-     ** Relative time of the detection status in seconds since start of recording
+     ** Relative time of the detection status in seconds since start of recording (deprecated) 
      * </pre>
      *
-     * <code>float time = 1;</code>
+     * <code>float time = 1 [deprecated = true];</code>
+     * @deprecated presage.physiology.DetectionStatus.time is deprecated.
+     *     See modules/messages/metrics.proto;l=30
      * @return The time.
      */
-    float getTime();
+    @java.lang.Deprecated float getTime();
 
     /**
      * <pre>
@@ -503,6 +608,16 @@ public final class MetricsProto {
      * @return The stable.
      */
     boolean getStable();
+
+    /**
+     * <pre>
+     ** Absolute timestamp at which the detection status was updated, in microseconds, since Linux epoch 
+     * </pre>
+     *
+     * <code>int64 timestamp = 4;</code>
+     * @return The timestamp.
+     */
+    long getTimestamp();
   }
   /**
    * <pre>
@@ -524,22 +639,26 @@ public final class MetricsProto {
     private float time_;
     /**
      * <pre>
-     ** Relative time of the detection status in seconds since start of recording
+     ** Relative time of the detection status in seconds since start of recording (deprecated) 
      * </pre>
      *
-     * <code>float time = 1;</code>
+     * <code>float time = 1 [deprecated = true];</code>
+     * @deprecated presage.physiology.DetectionStatus.time is deprecated.
+     *     See modules/messages/metrics.proto;l=30
      * @return The time.
      */
     @java.lang.Override
-    public float getTime() {
+    @java.lang.Deprecated public float getTime() {
       return time_;
     }
     /**
      * <pre>
-     ** Relative time of the detection status in seconds since start of recording
+     ** Relative time of the detection status in seconds since start of recording (deprecated) 
      * </pre>
      *
-     * <code>float time = 1;</code>
+     * <code>float time = 1 [deprecated = true];</code>
+     * @deprecated presage.physiology.DetectionStatus.time is deprecated.
+     *     See modules/messages/metrics.proto;l=30
      * @param value The time to set.
      */
     private void setTime(float value) {
@@ -548,10 +667,12 @@ public final class MetricsProto {
     }
     /**
      * <pre>
-     ** Relative time of the detection status in seconds since start of recording
+     ** Relative time of the detection status in seconds since start of recording (deprecated) 
      * </pre>
      *
-     * <code>float time = 1;</code>
+     * <code>float time = 1 [deprecated = true];</code>
+     * @deprecated presage.physiology.DetectionStatus.time is deprecated.
+     *     See modules/messages/metrics.proto;l=30
      */
     private void clearTime() {
       
@@ -632,6 +753,44 @@ public final class MetricsProto {
     private void clearStable() {
       
       stable_ = false;
+    }
+
+    public static final int TIMESTAMP_FIELD_NUMBER = 4;
+    private long timestamp_;
+    /**
+     * <pre>
+     ** Absolute timestamp at which the detection status was updated, in microseconds, since Linux epoch 
+     * </pre>
+     *
+     * <code>int64 timestamp = 4;</code>
+     * @return The timestamp.
+     */
+    @java.lang.Override
+    public long getTimestamp() {
+      return timestamp_;
+    }
+    /**
+     * <pre>
+     ** Absolute timestamp at which the detection status was updated, in microseconds, since Linux epoch 
+     * </pre>
+     *
+     * <code>int64 timestamp = 4;</code>
+     * @param value The timestamp to set.
+     */
+    private void setTimestamp(long value) {
+      
+      timestamp_ = value;
+    }
+    /**
+     * <pre>
+     ** Absolute timestamp at which the detection status was updated, in microseconds, since Linux epoch 
+     * </pre>
+     *
+     * <code>int64 timestamp = 4;</code>
+     */
+    private void clearTimestamp() {
+      
+      timestamp_ = 0L;
     }
 
     public static com.presage.physiology.proto.MetricsProto.DetectionStatus parseFrom(
@@ -737,39 +896,45 @@ public final class MetricsProto {
 
       /**
        * <pre>
-       ** Relative time of the detection status in seconds since start of recording
+       ** Relative time of the detection status in seconds since start of recording (deprecated) 
        * </pre>
        *
-       * <code>float time = 1;</code>
+       * <code>float time = 1 [deprecated = true];</code>
+       * @deprecated presage.physiology.DetectionStatus.time is deprecated.
+       *     See modules/messages/metrics.proto;l=30
        * @return The time.
        */
       @java.lang.Override
-      public float getTime() {
+      @java.lang.Deprecated public float getTime() {
         return instance.getTime();
       }
       /**
        * <pre>
-       ** Relative time of the detection status in seconds since start of recording
+       ** Relative time of the detection status in seconds since start of recording (deprecated) 
        * </pre>
        *
-       * <code>float time = 1;</code>
+       * <code>float time = 1 [deprecated = true];</code>
+       * @deprecated presage.physiology.DetectionStatus.time is deprecated.
+       *     See modules/messages/metrics.proto;l=30
        * @param value The time to set.
        * @return This builder for chaining.
        */
-      public Builder setTime(float value) {
+      @java.lang.Deprecated public Builder setTime(float value) {
         copyOnWrite();
         instance.setTime(value);
         return this;
       }
       /**
        * <pre>
-       ** Relative time of the detection status in seconds since start of recording
+       ** Relative time of the detection status in seconds since start of recording (deprecated) 
        * </pre>
        *
-       * <code>float time = 1;</code>
+       * <code>float time = 1 [deprecated = true];</code>
+       * @deprecated presage.physiology.DetectionStatus.time is deprecated.
+       *     See modules/messages/metrics.proto;l=30
        * @return This builder for chaining.
        */
-      public Builder clearTime() {
+      @java.lang.Deprecated public Builder clearTime() {
         copyOnWrite();
         instance.clearTime();
         return this;
@@ -855,6 +1020,46 @@ public final class MetricsProto {
         return this;
       }
 
+      /**
+       * <pre>
+       ** Absolute timestamp at which the detection status was updated, in microseconds, since Linux epoch 
+       * </pre>
+       *
+       * <code>int64 timestamp = 4;</code>
+       * @return The timestamp.
+       */
+      @java.lang.Override
+      public long getTimestamp() {
+        return instance.getTimestamp();
+      }
+      /**
+       * <pre>
+       ** Absolute timestamp at which the detection status was updated, in microseconds, since Linux epoch 
+       * </pre>
+       *
+       * <code>int64 timestamp = 4;</code>
+       * @param value The timestamp to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTimestamp(long value) {
+        copyOnWrite();
+        instance.setTimestamp(value);
+        return this;
+      }
+      /**
+       * <pre>
+       ** Absolute timestamp at which the detection status was updated, in microseconds, since Linux epoch 
+       * </pre>
+       *
+       * <code>int64 timestamp = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearTimestamp() {
+        copyOnWrite();
+        instance.clearTimestamp();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:presage.physiology.DetectionStatus)
     }
     @java.lang.Override
@@ -874,10 +1079,11 @@ public final class MetricsProto {
               "time_",
               "detected_",
               "stable_",
+              "timestamp_",
             };
             java.lang.String info =
-                "\u0000\u0003\u0000\u0000\u0001\u0003\u0003\u0000\u0000\u0000\u0001\u0001\u0002\u0007" +
-                "\u0003\u0007";
+                "\u0000\u0004\u0000\u0000\u0001\u0004\u0004\u0000\u0000\u0000\u0001\u0001\u0002\u0007" +
+                "\u0003\u0007\u0004\u0002";
             return newMessageInfo(DEFAULT_INSTANCE, info, objects);
         }
         // fall through
@@ -938,13 +1144,15 @@ public final class MetricsProto {
 
     /**
      * <pre>
-     ** Relative time of the measurement in seconds since start of recording
+     ** Relative time of the measurement in seconds since start of recording (deprecated) 
      * </pre>
      *
-     * <code>float time = 1;</code>
+     * <code>float time = 1 [deprecated = true];</code>
+     * @deprecated presage.physiology.MeasurementWithConfidence.time is deprecated.
+     *     See modules/messages/metrics.proto;l=45
      * @return The time.
      */
-    float getTime();
+    @java.lang.Deprecated float getTime();
 
     /**
      * <pre>
@@ -975,6 +1183,16 @@ public final class MetricsProto {
      * @return The confidence.
      */
     float getConfidence();
+
+    /**
+     * <pre>
+     ** Absolute timestamp at which the measurement was taken, in microseconds, since Linux epoch 
+     * </pre>
+     *
+     * <code>int64 timestamp = 5;</code>
+     * @return The timestamp.
+     */
+    long getTimestamp();
   }
   /**
    * <pre>
@@ -996,22 +1214,26 @@ public final class MetricsProto {
     private float time_;
     /**
      * <pre>
-     ** Relative time of the measurement in seconds since start of recording
+     ** Relative time of the measurement in seconds since start of recording (deprecated) 
      * </pre>
      *
-     * <code>float time = 1;</code>
+     * <code>float time = 1 [deprecated = true];</code>
+     * @deprecated presage.physiology.MeasurementWithConfidence.time is deprecated.
+     *     See modules/messages/metrics.proto;l=45
      * @return The time.
      */
     @java.lang.Override
-    public float getTime() {
+    @java.lang.Deprecated public float getTime() {
       return time_;
     }
     /**
      * <pre>
-     ** Relative time of the measurement in seconds since start of recording
+     ** Relative time of the measurement in seconds since start of recording (deprecated) 
      * </pre>
      *
-     * <code>float time = 1;</code>
+     * <code>float time = 1 [deprecated = true];</code>
+     * @deprecated presage.physiology.MeasurementWithConfidence.time is deprecated.
+     *     See modules/messages/metrics.proto;l=45
      * @param value The time to set.
      */
     private void setTime(float value) {
@@ -1020,10 +1242,12 @@ public final class MetricsProto {
     }
     /**
      * <pre>
-     ** Relative time of the measurement in seconds since start of recording
+     ** Relative time of the measurement in seconds since start of recording (deprecated) 
      * </pre>
      *
-     * <code>float time = 1;</code>
+     * <code>float time = 1 [deprecated = true];</code>
+     * @deprecated presage.physiology.MeasurementWithConfidence.time is deprecated.
+     *     See modules/messages/metrics.proto;l=45
      */
     private void clearTime() {
       
@@ -1144,6 +1368,44 @@ public final class MetricsProto {
       confidence_ = 0F;
     }
 
+    public static final int TIMESTAMP_FIELD_NUMBER = 5;
+    private long timestamp_;
+    /**
+     * <pre>
+     ** Absolute timestamp at which the measurement was taken, in microseconds, since Linux epoch 
+     * </pre>
+     *
+     * <code>int64 timestamp = 5;</code>
+     * @return The timestamp.
+     */
+    @java.lang.Override
+    public long getTimestamp() {
+      return timestamp_;
+    }
+    /**
+     * <pre>
+     ** Absolute timestamp at which the measurement was taken, in microseconds, since Linux epoch 
+     * </pre>
+     *
+     * <code>int64 timestamp = 5;</code>
+     * @param value The timestamp to set.
+     */
+    private void setTimestamp(long value) {
+      
+      timestamp_ = value;
+    }
+    /**
+     * <pre>
+     ** Absolute timestamp at which the measurement was taken, in microseconds, since Linux epoch 
+     * </pre>
+     *
+     * <code>int64 timestamp = 5;</code>
+     */
+    private void clearTimestamp() {
+      
+      timestamp_ = 0L;
+    }
+
     public static com.presage.physiology.proto.MetricsProto.MeasurementWithConfidence parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -1247,39 +1509,45 @@ public final class MetricsProto {
 
       /**
        * <pre>
-       ** Relative time of the measurement in seconds since start of recording
+       ** Relative time of the measurement in seconds since start of recording (deprecated) 
        * </pre>
        *
-       * <code>float time = 1;</code>
+       * <code>float time = 1 [deprecated = true];</code>
+       * @deprecated presage.physiology.MeasurementWithConfidence.time is deprecated.
+       *     See modules/messages/metrics.proto;l=45
        * @return The time.
        */
       @java.lang.Override
-      public float getTime() {
+      @java.lang.Deprecated public float getTime() {
         return instance.getTime();
       }
       /**
        * <pre>
-       ** Relative time of the measurement in seconds since start of recording
+       ** Relative time of the measurement in seconds since start of recording (deprecated) 
        * </pre>
        *
-       * <code>float time = 1;</code>
+       * <code>float time = 1 [deprecated = true];</code>
+       * @deprecated presage.physiology.MeasurementWithConfidence.time is deprecated.
+       *     See modules/messages/metrics.proto;l=45
        * @param value The time to set.
        * @return This builder for chaining.
        */
-      public Builder setTime(float value) {
+      @java.lang.Deprecated public Builder setTime(float value) {
         copyOnWrite();
         instance.setTime(value);
         return this;
       }
       /**
        * <pre>
-       ** Relative time of the measurement in seconds since start of recording
+       ** Relative time of the measurement in seconds since start of recording (deprecated) 
        * </pre>
        *
-       * <code>float time = 1;</code>
+       * <code>float time = 1 [deprecated = true];</code>
+       * @deprecated presage.physiology.MeasurementWithConfidence.time is deprecated.
+       *     See modules/messages/metrics.proto;l=45
        * @return This builder for chaining.
        */
-      public Builder clearTime() {
+      @java.lang.Deprecated public Builder clearTime() {
         copyOnWrite();
         instance.clearTime();
         return this;
@@ -1405,6 +1673,46 @@ public final class MetricsProto {
         return this;
       }
 
+      /**
+       * <pre>
+       ** Absolute timestamp at which the measurement was taken, in microseconds, since Linux epoch 
+       * </pre>
+       *
+       * <code>int64 timestamp = 5;</code>
+       * @return The timestamp.
+       */
+      @java.lang.Override
+      public long getTimestamp() {
+        return instance.getTimestamp();
+      }
+      /**
+       * <pre>
+       ** Absolute timestamp at which the measurement was taken, in microseconds, since Linux epoch 
+       * </pre>
+       *
+       * <code>int64 timestamp = 5;</code>
+       * @param value The timestamp to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTimestamp(long value) {
+        copyOnWrite();
+        instance.setTimestamp(value);
+        return this;
+      }
+      /**
+       * <pre>
+       ** Absolute timestamp at which the measurement was taken, in microseconds, since Linux epoch 
+       * </pre>
+       *
+       * <code>int64 timestamp = 5;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearTimestamp() {
+        copyOnWrite();
+        instance.clearTimestamp();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:presage.physiology.MeasurementWithConfidence)
     }
     @java.lang.Override
@@ -1425,10 +1733,11 @@ public final class MetricsProto {
               "value_",
               "stable_",
               "confidence_",
+              "timestamp_",
             };
             java.lang.String info =
-                "\u0000\u0004\u0000\u0000\u0001\u0004\u0004\u0000\u0000\u0000\u0001\u0001\u0002\u0001" +
-                "\u0003\u0007\u0004\u0001";
+                "\u0000\u0005\u0000\u0000\u0001\u0005\u0005\u0000\u0000\u0000\u0001\u0001\u0002\u0001" +
+                "\u0003\u0007\u0004\u0001\u0005\u0002";
             return newMessageInfo(DEFAULT_INSTANCE, info, objects);
         }
         // fall through
@@ -1489,13 +1798,15 @@ public final class MetricsProto {
 
     /**
      * <pre>
-     ** Relative time of the micro-expression detection in seconds since start of recording 
+     ** Relative time of the micro-expression detection in seconds since start of recording (deprecated) 
      * </pre>
      *
-     * <code>float time = 1;</code>
+     * <code>float time = 1 [deprecated = true];</code>
+     * @deprecated presage.physiology.MicroExpression.time is deprecated.
+     *     See modules/messages/metrics.proto;l=62
      * @return The time.
      */
-    float getTime();
+    @java.lang.Deprecated float getTime();
 
     /**
      * <pre>
@@ -1536,6 +1847,16 @@ public final class MetricsProto {
      * @return The confidence.
      */
     float getConfidence();
+
+    /**
+     * <pre>
+     ** Absolute timestamp at which the micro-expression was detected, in microseconds, since Linux epoch 
+     * </pre>
+     *
+     * <code>int64 timestamp = 5;</code>
+     * @return The timestamp.
+     */
+    long getTimestamp();
   }
   /**
    * <pre>
@@ -1558,22 +1879,26 @@ public final class MetricsProto {
     private float time_;
     /**
      * <pre>
-     ** Relative time of the micro-expression detection in seconds since start of recording 
+     ** Relative time of the micro-expression detection in seconds since start of recording (deprecated) 
      * </pre>
      *
-     * <code>float time = 1;</code>
+     * <code>float time = 1 [deprecated = true];</code>
+     * @deprecated presage.physiology.MicroExpression.time is deprecated.
+     *     See modules/messages/metrics.proto;l=62
      * @return The time.
      */
     @java.lang.Override
-    public float getTime() {
+    @java.lang.Deprecated public float getTime() {
       return time_;
     }
     /**
      * <pre>
-     ** Relative time of the micro-expression detection in seconds since start of recording 
+     ** Relative time of the micro-expression detection in seconds since start of recording (deprecated) 
      * </pre>
      *
-     * <code>float time = 1;</code>
+     * <code>float time = 1 [deprecated = true];</code>
+     * @deprecated presage.physiology.MicroExpression.time is deprecated.
+     *     See modules/messages/metrics.proto;l=62
      * @param value The time to set.
      */
     private void setTime(float value) {
@@ -1582,10 +1907,12 @@ public final class MetricsProto {
     }
     /**
      * <pre>
-     ** Relative time of the micro-expression detection in seconds since start of recording 
+     ** Relative time of the micro-expression detection in seconds since start of recording (deprecated) 
      * </pre>
      *
-     * <code>float time = 1;</code>
+     * <code>float time = 1 [deprecated = true];</code>
+     * @deprecated presage.physiology.MicroExpression.time is deprecated.
+     *     See modules/messages/metrics.proto;l=62
      */
     private void clearTime() {
       
@@ -1735,6 +2062,44 @@ public final class MetricsProto {
       confidence_ = 0F;
     }
 
+    public static final int TIMESTAMP_FIELD_NUMBER = 5;
+    private long timestamp_;
+    /**
+     * <pre>
+     ** Absolute timestamp at which the micro-expression was detected, in microseconds, since Linux epoch 
+     * </pre>
+     *
+     * <code>int64 timestamp = 5;</code>
+     * @return The timestamp.
+     */
+    @java.lang.Override
+    public long getTimestamp() {
+      return timestamp_;
+    }
+    /**
+     * <pre>
+     ** Absolute timestamp at which the micro-expression was detected, in microseconds, since Linux epoch 
+     * </pre>
+     *
+     * <code>int64 timestamp = 5;</code>
+     * @param value The timestamp to set.
+     */
+    private void setTimestamp(long value) {
+      
+      timestamp_ = value;
+    }
+    /**
+     * <pre>
+     ** Absolute timestamp at which the micro-expression was detected, in microseconds, since Linux epoch 
+     * </pre>
+     *
+     * <code>int64 timestamp = 5;</code>
+     */
+    private void clearTimestamp() {
+      
+      timestamp_ = 0L;
+    }
+
     public static com.presage.physiology.proto.MetricsProto.MicroExpression parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -1838,39 +2203,45 @@ public final class MetricsProto {
 
       /**
        * <pre>
-       ** Relative time of the micro-expression detection in seconds since start of recording 
+       ** Relative time of the micro-expression detection in seconds since start of recording (deprecated) 
        * </pre>
        *
-       * <code>float time = 1;</code>
+       * <code>float time = 1 [deprecated = true];</code>
+       * @deprecated presage.physiology.MicroExpression.time is deprecated.
+       *     See modules/messages/metrics.proto;l=62
        * @return The time.
        */
       @java.lang.Override
-      public float getTime() {
+      @java.lang.Deprecated public float getTime() {
         return instance.getTime();
       }
       /**
        * <pre>
-       ** Relative time of the micro-expression detection in seconds since start of recording 
+       ** Relative time of the micro-expression detection in seconds since start of recording (deprecated) 
        * </pre>
        *
-       * <code>float time = 1;</code>
+       * <code>float time = 1 [deprecated = true];</code>
+       * @deprecated presage.physiology.MicroExpression.time is deprecated.
+       *     See modules/messages/metrics.proto;l=62
        * @param value The time to set.
        * @return This builder for chaining.
        */
-      public Builder setTime(float value) {
+      @java.lang.Deprecated public Builder setTime(float value) {
         copyOnWrite();
         instance.setTime(value);
         return this;
       }
       /**
        * <pre>
-       ** Relative time of the micro-expression detection in seconds since start of recording 
+       ** Relative time of the micro-expression detection in seconds since start of recording (deprecated) 
        * </pre>
        *
-       * <code>float time = 1;</code>
+       * <code>float time = 1 [deprecated = true];</code>
+       * @deprecated presage.physiology.MicroExpression.time is deprecated.
+       *     See modules/messages/metrics.proto;l=62
        * @return This builder for chaining.
        */
-      public Builder clearTime() {
+      @java.lang.Deprecated public Builder clearTime() {
         copyOnWrite();
         instance.clearTime();
         return this;
@@ -2025,6 +2396,46 @@ public final class MetricsProto {
         return this;
       }
 
+      /**
+       * <pre>
+       ** Absolute timestamp at which the micro-expression was detected, in microseconds, since Linux epoch 
+       * </pre>
+       *
+       * <code>int64 timestamp = 5;</code>
+       * @return The timestamp.
+       */
+      @java.lang.Override
+      public long getTimestamp() {
+        return instance.getTimestamp();
+      }
+      /**
+       * <pre>
+       ** Absolute timestamp at which the micro-expression was detected, in microseconds, since Linux epoch 
+       * </pre>
+       *
+       * <code>int64 timestamp = 5;</code>
+       * @param value The timestamp to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTimestamp(long value) {
+        copyOnWrite();
+        instance.setTimestamp(value);
+        return this;
+      }
+      /**
+       * <pre>
+       ** Absolute timestamp at which the micro-expression was detected, in microseconds, since Linux epoch 
+       * </pre>
+       *
+       * <code>int64 timestamp = 5;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearTimestamp() {
+        copyOnWrite();
+        instance.clearTimestamp();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:presage.physiology.MicroExpression)
     }
     @java.lang.Override
@@ -2045,10 +2456,11 @@ public final class MetricsProto {
               "expression_",
               "stable_",
               "confidence_",
+              "timestamp_",
             };
             java.lang.String info =
-                "\u0000\u0004\u0000\u0000\u0001\u0004\u0004\u0000\u0000\u0000\u0001\u0001\u0002\u0208" +
-                "\u0003\u0007\u0004\u0001";
+                "\u0000\u0005\u0000\u0000\u0001\u0005\u0005\u0000\u0000\u0000\u0001\u0001\u0002\u0208" +
+                "\u0003\u0007\u0004\u0001\u0005\u0002";
             return newMessageInfo(DEFAULT_INSTANCE, info, objects);
         }
         // fall through
@@ -7605,13 +8017,15 @@ public final class MetricsProto {
 
     /**
      * <pre>
-     ** Relative time of landmark detection in seconds since start of recording 
+     ** Relative time of landmark detection in seconds since start of recording (deprecated) 
      * </pre>
      *
-     * <code>float time = 1;</code>
+     * <code>float time = 1 [deprecated = true];</code>
+     * @deprecated presage.physiology.Landmarks.time is deprecated.
+     *     See modules/messages/metrics.proto;l=146
      * @return The time.
      */
-    float getTime();
+    @java.lang.Deprecated float getTime();
 
     /**
      * <pre>
@@ -7658,6 +8072,16 @@ public final class MetricsProto {
      * @return The reset.
      */
     boolean getReset();
+
+    /**
+     * <pre>
+     ** Absolute timestamp at which the landmarks were detected, in microseconds, since Linux epoch 
+     * </pre>
+     *
+     * <code>int64 timestamp = 5;</code>
+     * @return The timestamp.
+     */
+    long getTimestamp();
   }
   /**
    * <pre>
@@ -7680,22 +8104,26 @@ public final class MetricsProto {
     private float time_;
     /**
      * <pre>
-     ** Relative time of landmark detection in seconds since start of recording 
+     ** Relative time of landmark detection in seconds since start of recording (deprecated) 
      * </pre>
      *
-     * <code>float time = 1;</code>
+     * <code>float time = 1 [deprecated = true];</code>
+     * @deprecated presage.physiology.Landmarks.time is deprecated.
+     *     See modules/messages/metrics.proto;l=146
      * @return The time.
      */
     @java.lang.Override
-    public float getTime() {
+    @java.lang.Deprecated public float getTime() {
       return time_;
     }
     /**
      * <pre>
-     ** Relative time of landmark detection in seconds since start of recording 
+     ** Relative time of landmark detection in seconds since start of recording (deprecated) 
      * </pre>
      *
-     * <code>float time = 1;</code>
+     * <code>float time = 1 [deprecated = true];</code>
+     * @deprecated presage.physiology.Landmarks.time is deprecated.
+     *     See modules/messages/metrics.proto;l=146
      * @param value The time to set.
      */
     private void setTime(float value) {
@@ -7704,10 +8132,12 @@ public final class MetricsProto {
     }
     /**
      * <pre>
-     ** Relative time of landmark detection in seconds since start of recording 
+     ** Relative time of landmark detection in seconds since start of recording (deprecated) 
      * </pre>
      *
-     * <code>float time = 1;</code>
+     * <code>float time = 1 [deprecated = true];</code>
+     * @deprecated presage.physiology.Landmarks.time is deprecated.
+     *     See modules/messages/metrics.proto;l=146
      */
     private void clearTime() {
       
@@ -7928,6 +8358,44 @@ public final class MetricsProto {
       reset_ = false;
     }
 
+    public static final int TIMESTAMP_FIELD_NUMBER = 5;
+    private long timestamp_;
+    /**
+     * <pre>
+     ** Absolute timestamp at which the landmarks were detected, in microseconds, since Linux epoch 
+     * </pre>
+     *
+     * <code>int64 timestamp = 5;</code>
+     * @return The timestamp.
+     */
+    @java.lang.Override
+    public long getTimestamp() {
+      return timestamp_;
+    }
+    /**
+     * <pre>
+     ** Absolute timestamp at which the landmarks were detected, in microseconds, since Linux epoch 
+     * </pre>
+     *
+     * <code>int64 timestamp = 5;</code>
+     * @param value The timestamp to set.
+     */
+    private void setTimestamp(long value) {
+      
+      timestamp_ = value;
+    }
+    /**
+     * <pre>
+     ** Absolute timestamp at which the landmarks were detected, in microseconds, since Linux epoch 
+     * </pre>
+     *
+     * <code>int64 timestamp = 5;</code>
+     */
+    private void clearTimestamp() {
+      
+      timestamp_ = 0L;
+    }
+
     public static com.presage.physiology.proto.MetricsProto.Landmarks parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -8031,39 +8499,45 @@ public final class MetricsProto {
 
       /**
        * <pre>
-       ** Relative time of landmark detection in seconds since start of recording 
+       ** Relative time of landmark detection in seconds since start of recording (deprecated) 
        * </pre>
        *
-       * <code>float time = 1;</code>
+       * <code>float time = 1 [deprecated = true];</code>
+       * @deprecated presage.physiology.Landmarks.time is deprecated.
+       *     See modules/messages/metrics.proto;l=146
        * @return The time.
        */
       @java.lang.Override
-      public float getTime() {
+      @java.lang.Deprecated public float getTime() {
         return instance.getTime();
       }
       /**
        * <pre>
-       ** Relative time of landmark detection in seconds since start of recording 
+       ** Relative time of landmark detection in seconds since start of recording (deprecated) 
        * </pre>
        *
-       * <code>float time = 1;</code>
+       * <code>float time = 1 [deprecated = true];</code>
+       * @deprecated presage.physiology.Landmarks.time is deprecated.
+       *     See modules/messages/metrics.proto;l=146
        * @param value The time to set.
        * @return This builder for chaining.
        */
-      public Builder setTime(float value) {
+      @java.lang.Deprecated public Builder setTime(float value) {
         copyOnWrite();
         instance.setTime(value);
         return this;
       }
       /**
        * <pre>
-       ** Relative time of landmark detection in seconds since start of recording 
+       ** Relative time of landmark detection in seconds since start of recording (deprecated) 
        * </pre>
        *
-       * <code>float time = 1;</code>
+       * <code>float time = 1 [deprecated = true];</code>
+       * @deprecated presage.physiology.Landmarks.time is deprecated.
+       *     See modules/messages/metrics.proto;l=146
        * @return This builder for chaining.
        */
-      public Builder clearTime() {
+      @java.lang.Deprecated public Builder clearTime() {
         copyOnWrite();
         instance.clearTime();
         return this;
@@ -8299,6 +8773,46 @@ public final class MetricsProto {
         return this;
       }
 
+      /**
+       * <pre>
+       ** Absolute timestamp at which the landmarks were detected, in microseconds, since Linux epoch 
+       * </pre>
+       *
+       * <code>int64 timestamp = 5;</code>
+       * @return The timestamp.
+       */
+      @java.lang.Override
+      public long getTimestamp() {
+        return instance.getTimestamp();
+      }
+      /**
+       * <pre>
+       ** Absolute timestamp at which the landmarks were detected, in microseconds, since Linux epoch 
+       * </pre>
+       *
+       * <code>int64 timestamp = 5;</code>
+       * @param value The timestamp to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTimestamp(long value) {
+        copyOnWrite();
+        instance.setTimestamp(value);
+        return this;
+      }
+      /**
+       * <pre>
+       ** Absolute timestamp at which the landmarks were detected, in microseconds, since Linux epoch 
+       * </pre>
+       *
+       * <code>int64 timestamp = 5;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearTimestamp() {
+        copyOnWrite();
+        instance.clearTimestamp();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:presage.physiology.Landmarks)
     }
     @java.lang.Override
@@ -8320,10 +8834,11 @@ public final class MetricsProto {
               com.presage.physiology.proto.PointTypes.Point2dFloat.class,
               "stable_",
               "reset_",
+              "timestamp_",
             };
             java.lang.String info =
-                "\u0000\u0004\u0000\u0000\u0001\u0004\u0004\u0000\u0001\u0000\u0001\u0001\u0002\u001b" +
-                "\u0003\u0007\u0004\u0007";
+                "\u0000\u0005\u0000\u0000\u0001\u0005\u0005\u0000\u0001\u0000\u0001\u0001\u0002\u001b" +
+                "\u0003\u0007\u0004\u0007\u0005\u0002";
             return newMessageInfo(DEFAULT_INSTANCE, info, objects);
         }
         // fall through

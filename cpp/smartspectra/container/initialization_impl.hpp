@@ -35,7 +35,10 @@
 #include <opencv2/highgui.hpp>
 // === local includes (if any) ===
 #include "initialization.hpp"
-#include "configuration.h"
+#include "configuration.hpp"
+#ifdef ENABLE_CUSTOM_SERVER
+#include "custom_rest_settings.hpp"
+#endif
 // @formatter:off
 #ifdef __linux__
 #include <smartspectra/video_source/camera/camera_v4l2.hpp>
@@ -150,6 +153,17 @@ inline absl::Status SupplyGraphIntegrationSettings(
     const settings::IntegrationSettings<settings::IntegrationMode::Rest>& integration_settings
 ) {
     input_side_packets[pe::graph::input_side_packets::kApiKey] = mediapipe::MakePacket<std::string>(integration_settings.api_key);
+    
+#ifdef ENABLE_CUSTOM_SERVER
+    // Apply custom server configuration if enabled
+    if (integration_settings.continuous_server_url.has_value()) {
+        settings::CustomServerConfiguration config;
+        config.continuous_server_url = integration_settings.continuous_server_url;
+        
+        MP_RETURN_IF_ERROR(settings::ApplyCustomServerConfig(config));
+    }
+#endif
+    
     return absl::OkStatus();
 }
 

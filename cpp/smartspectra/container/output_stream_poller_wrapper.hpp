@@ -20,6 +20,7 @@
 
 #pragma once
 // === standard library includes (if any) ===
+#include <optional>
 // === third-party includes (if any) ===
 #include <mediapipe/framework/output_stream_poller.h>
 #include <mediapipe/framework/calculator_graph.h>
@@ -31,14 +32,22 @@ namespace presage::smartspectra::container::output_stream_poller_wrapper {
 /** Lightweight RAII wrapper around MediaPipe's OutputStreamPoller. */
 class OutputStreamPollerWrapper {
 public:
-    OutputStreamPollerWrapper();
-    ~OutputStreamPollerWrapper();
+    OutputStreamPollerWrapper() = default;
+    ~OutputStreamPollerWrapper() = default;
+    
+    // Non-copyable - MediaPipe objects typically aren't copyable
+    OutputStreamPollerWrapper(const OutputStreamPollerWrapper&) = delete;
+    OutputStreamPollerWrapper& operator=(const OutputStreamPollerWrapper&) = delete;
+    
+    // Movable
+    OutputStreamPollerWrapper(OutputStreamPollerWrapper&&) = default;
+    OutputStreamPollerWrapper& operator=(OutputStreamPollerWrapper&&) = default;
     /** Attach to a stream from the given graph. */
     absl::Status Initialize(mediapipe::CalculatorGraph& graph, const std::string& stream_name);
     /** Access the underlying poller. */
     mediapipe::OutputStreamPoller& Get();
 private:
-    mediapipe::OutputStreamPoller* stream_poller = nullptr;
+    std::optional<mediapipe::OutputStreamPoller> stream_poller_;
 };
 
 } // namespace presage::smartspectra::container::output_stream_poller_wrapper

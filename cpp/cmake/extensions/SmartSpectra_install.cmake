@@ -67,6 +67,12 @@ install(FILES
         DESTINATION ${${PROJECT_NAME}_INSTALL_INCLUDE_DIR}/smartspectra
 )
 
+# === Install generated configuration header file
+install(FILES
+        ${PROJECT_BINARY_DIR}/smartspectra/container/configuration.hpp
+        DESTINATION ${${PROJECT_NAME}_INSTALL_INCLUDE_DIR}/smartspectra/container
+)
+
 install(FILES
         ${PROJECT_SOURCE_DIR}/cmake/modules/FindV4L.cmake
         DESTINATION ${${PROJECT_NAME}_INSTALL_CMAKE_DIR}/modules

@@ -148,7 +148,7 @@ int main(int argc, char** argv) {
         auto hud = std::make_unique<gui::OpenCvHud>(10, 0, 1260, 400);
         
         // Set up callbacks
-        if (auto status = container->SetOnCoreMetricsOutput(
+        auto status = container->SetOnCoreMetricsOutput(
             [&hud](const presage::physiology::MetricsBuffer& metrics, int64_t timestamp) {
                 int pulse = static_cast<int>(metrics.pulse().strict().value());
                 int breathing = static_cast<int>(metrics.breathing().strict().value());
@@ -156,12 +156,14 @@ int main(int argc, char** argv) {
                 std::cout << "Vitals - Pulse: " << pulse << " BPM, Breathing: " << breathing << " BPM\n";
                 hud->UpdateWithNewMetrics(metrics);
                 return absl::OkStatus();
-            }); !status.ok()) {
+            }
+        ); 
+        if (!status.ok()) {
             std::cerr << "Failed to set metrics callback: " << status.message() << "\n";
             return 1;
         }
         
-        if (auto status = container->SetOnVideoOutput(
+        status = container->SetOnVideoOutput(
             [&hud](cv::Mat& frame, int64_t timestamp) {
                 if (auto render_status = hud->Render(frame); !render_status.ok()) {
                     std::cerr << "HUD render failed: " << render_status.message() << "\n";
@@ -173,16 +175,20 @@ int main(int argc, char** argv) {
                     return absl::CancelledError("User quit");
                 }
                 return absl::OkStatus();
-            }); !status.ok()) {
+            }
+        ); 
+        if (!status.ok()) {
             std::cerr << "Failed to set video callback: " << status.message() << "\n";
             return 1;
         }
         
-        if (auto status = container->SetOnStatusChange(
-            [](presage::physiology::StatusCode status) {
-                std::cout << "Status: " << presage::physiology::GetStatusDescription(status) << "\n";
+        status = container->SetOnStatusChange(
+            [](presage::physiology::StatusValue imaging_status) {
+                std::cout << "Imaging/processing status: " << presage::physiology::GetStatusDescription(imaging_status.value()) << "\n";
                 return absl::OkStatus();
-            }); !status.ok()) {
+            }
+        ); 
+        if(!status.ok()) {
             std::cerr << "Failed to set status callback: " << status.message() << "\n";
             return 1;
         }

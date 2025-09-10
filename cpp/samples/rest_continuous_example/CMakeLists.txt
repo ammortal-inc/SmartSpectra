@@ -7,6 +7,13 @@ target_link_libraries(${EXECUTABLE_NAME}
         SmartSpectra::Gui
 )
 
+# Add build directory to include paths when building locally to find generated configuration.hpp
+if (SMART_SPECTRA_SAMPLE_LOCAL_BUILD)
+    target_include_directories(${EXECUTABLE_NAME} PRIVATE 
+        ${SMART_SPECTRA_BINARY_DIRECTORY}
+    )
+endif ()
+
 if (INSTALL_SAMPLES)
     install(TARGETS ${EXECUTABLE_NAME}
             EXPORT ${PROJECT_NAME}Targets

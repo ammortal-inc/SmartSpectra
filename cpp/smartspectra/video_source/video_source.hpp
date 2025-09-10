@@ -40,7 +40,7 @@ namespace presage::smartspectra::video_source {
 /** Epoch timestamp captured at startup for relative frame timing. */
 const int64_t microsecond_epoch_at_start =
     std::chrono::duration_cast<std::chrono::microseconds>(
-        std::chrono::high_resolution_clock::now().time_since_epoch()
+        std::chrono::system_clock::now().time_since_epoch()
     ).count();
 
 /**

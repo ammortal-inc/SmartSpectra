@@ -5,6 +5,7 @@ plugins {
     id("maven-publish")
     id("signing")
     id("kotlin-parcelize")
+    id("org.cyclonedx.bom") version "1.8.2"
 }
 
 android {
@@ -203,4 +204,38 @@ publishing {
             }
         }
     }
+}
+
+
+// CycloneDX SBOM Configuration
+tasks.named<org.cyclonedx.gradle.CycloneDxTask>("cyclonedxBom") {
+    setIncludeConfigs(listOf("releaseRuntimeClasspath", "releaseCompileClasspath"))
+    setSkipConfigs(listOf(".*Test.*", ".*AndroidTest.*", ".*test.*", ".*debug.*"))
+    setSchemaVersion("1.4")
+    setIncludeLicenseText(false)
+    setOutputFormat("json")
+    setOutputName("smartspectra-android-sdk-bom")
+    setProjectType("library")
+    setIncludeBomSerialNumber(true)
+    setDestination(file("${layout.buildDirectory.get()}/reports/bom"))
+}
+
+// Task to generate XML format SBOM for SDK
+tasks.register<org.cyclonedx.gradle.CycloneDxTask>("cyclonedxBomXml") {
+    setIncludeConfigs(listOf("releaseRuntimeClasspath", "releaseCompileClasspath"))
+    setSkipConfigs(listOf(".*Test.*", ".*AndroidTest.*", ".*test.*", ".*debug.*"))
+    setSchemaVersion("1.4")
+    setIncludeLicenseText(false)
+    setOutputFormat("xml")
+    setOutputName("smartspectra-android-sdk-bom")
+    setProjectType("library")
+    setIncludeBomSerialNumber(true)
+    setDestination(file("${layout.buildDirectory.get()}/reports/bom"))
+}
+
+// Task to generate both JSON and XML formats
+tasks.register("generateAllSBOMFormats") {
+    group = "verification"
+    description = "Generate SBOM in both JSON and XML formats"
+    dependsOn("cyclonedxBom", "cyclonedxBomXml")
 }
