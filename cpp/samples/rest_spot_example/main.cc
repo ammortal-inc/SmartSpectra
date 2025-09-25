@@ -55,6 +55,25 @@ ABSL_FLAG(std::string, input_video_path, "",
           "the app will attempt to use a webcam / stream.");
 ABSL_FLAG(std::string, input_video_time_path, "",
           "Full path of video timestamp txt file, where each row represents the timestamp of each frame in milliseconds.");
+ABSL_FLAG(double, max_fps, -1.0, "Maximum frame rate to use. -1.0 means use camera default.");
+
+// region ======================== PYLON CAMERA SETTINGS (BASLER) ====================================================
+ABSL_FLAG(std::string, pylon_camera_serial, "",
+          "Serial number of the Basler camera to use. If empty, first available Pylon camera is used.");
+ABSL_FLAG(std::string, pylon_pixel_format, "RGB8",
+          "Pixel format for Pylon cameras. Common values: RGB8, BGR8, Mono8, BayerRG8.");
+ABSL_FLAG(double, pylon_exposure_time_us, -1.0,
+          "Exposure time in microseconds for Pylon cameras. -1.0 enables auto exposure.");
+ABSL_FLAG(bool, pylon_auto_exposure, true,
+          "Enable automatic exposure control for Pylon cameras.");
+ABSL_FLAG(double, pylon_gain, -1.0,
+          "Camera gain for Pylon cameras. -1.0 enables auto gain.");
+ABSL_FLAG(int, pylon_packet_size, -1,
+          "GigE packet size for Basler GigE cameras. -1 enables automatic packet size.");
+ABSL_FLAG(int, pylon_packet_delay, -1,
+          "GigE inter-packet delay for Basler GigE cameras. -1 enables automatic delay.");
+ABSL_FLAG(int, pylon_buffer_count, 5,
+          "Number of acquisition buffers for Pylon cameras.");
 // endregion ===========================================================================================================
 
 ABSL_FLAG(bool, headless, false, "If true, no GUI will be displayed.");
@@ -165,8 +184,14 @@ int main(int argc, char** argv) {
 
     absl::SetProgramUsageMessage(
         "Run Presage Physiology Preprocessing C++ Rest Spot Example on either a video file or video input from camera.\n"
-        "The application will use Presage REST API to retrieve metrics upon successful processing"
-        "(hit \"s\" to start recording data)."
+        "The application will use Presage REST API to retrieve metrics upon successful processing "
+        "(hit \"s\" to start recording data).\n\n"
+        "Supports standard webcams, Basler GigE Vision cameras (via Pylon SDK), and video file input.\n\n"
+        "Examples:\n"
+        "  # Use default camera for 30-second measurement:\n"
+        "  ./rest_spot_example --api_key=YOUR_KEY --spot_duration=30.0\n\n"
+        "  # Use specific Basler camera:\n"
+        "  ./rest_spot_example --pylon_camera_serial=12345678 --api_key=YOUR_KEY"
     );
     absl::ParseCommandLine(argc, argv);
 
@@ -176,16 +201,25 @@ int main(int argc, char** argv) {
 
     settings::Settings<settings::OperationMode::Spot, settings::IntegrationMode::Rest> settings{
         vs::VideoSourceSettings{
-            absl::GetFlag(FLAGS_camera_device_index),
-            absl::GetFlag(FLAGS_resolution_selection_mode),
-            absl::GetFlag(FLAGS_capture_width_px),
-            absl::GetFlag(FLAGS_capture_height_px),
-            absl::GetFlag(FLAGS_resolution_range),
-            absl::GetFlag(FLAGS_codec),
-            absl::GetFlag(FLAGS_auto_lock),
-            absl::GetFlag(FLAGS_input_transform_mode),
-            absl::GetFlag(FLAGS_input_video_path),
-            absl::GetFlag(FLAGS_input_video_time_path),
+            .device_index = absl::GetFlag(FLAGS_camera_device_index),
+            .resolution_selection_mode = absl::GetFlag(FLAGS_resolution_selection_mode),
+            .capture_width_px = absl::GetFlag(FLAGS_capture_width_px),
+            .capture_height_px = absl::GetFlag(FLAGS_capture_height_px),
+            .resolution_range = absl::GetFlag(FLAGS_resolution_range),
+            .codec = absl::GetFlag(FLAGS_codec),
+            .auto_lock = absl::GetFlag(FLAGS_auto_lock),
+            .input_transform_mode = absl::GetFlag(FLAGS_input_transform_mode),
+            .max_fps = absl::GetFlag(FLAGS_max_fps),
+            .input_video_path = absl::GetFlag(FLAGS_input_video_path),
+            .input_video_time_path = absl::GetFlag(FLAGS_input_video_time_path),
+            .pylon_camera_serial = absl::GetFlag(FLAGS_pylon_camera_serial),
+            .pylon_pixel_format = absl::GetFlag(FLAGS_pylon_pixel_format),
+            .pylon_exposure_time_us = absl::GetFlag(FLAGS_pylon_exposure_time_us),
+            .pylon_auto_exposure = absl::GetFlag(FLAGS_pylon_auto_exposure),
+            .pylon_gain = absl::GetFlag(FLAGS_pylon_gain),
+            .pylon_packet_size = absl::GetFlag(FLAGS_pylon_packet_size),
+            .pylon_packet_delay = absl::GetFlag(FLAGS_pylon_packet_delay),
+            .pylon_buffer_count = absl::GetFlag(FLAGS_pylon_buffer_count),
         },
         settings::VideoSinkSettings{
             absl::GetFlag(FLAGS_output_video_destination),

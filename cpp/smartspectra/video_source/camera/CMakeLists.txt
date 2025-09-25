@@ -39,6 +39,11 @@ if (HAVE_LINUX_VIDEODEV2_H)
     list(APPEND LIBRARY_PUBLIC_HEADERS camera_v4l2.hpp)
 endif ()
 
+if (HAVE_PYLON_SDK)
+    list(APPEND LIBRARY_SOURCES camera_pylon.cpp)
+    list(APPEND LIBRARY_PUBLIC_HEADERS camera_pylon.hpp)
+endif ()
+
 add_library(${LIBRARY_NAME} STATIC)
 add_library(SmartSpectra::VideoSource_Camera ALIAS ${LIBRARY_NAME})
 
@@ -55,6 +60,13 @@ target_include_directories(${LIBRARY_NAME} PUBLIC
 if (HAVE_LINUX_VIDEODEV2_H)
     target_link_libraries(${LIBRARY_NAME} PRIVATE v4l2)
 endif ()
+
+if (HAVE_PYLON_SDK)
+    target_include_directories(${LIBRARY_NAME} PRIVATE ${PYLON_INCLUDE_DIRS})
+    target_link_libraries(${LIBRARY_NAME} PRIVATE ${PYLON_LIBRARIES})
+    target_compile_definitions(${LIBRARY_NAME} PRIVATE HAVE_PYLON_SDK)
+endif ()
+
 target_link_libraries(${LIBRARY_NAME} PUBLIC ${PROJECT_NAME}::VideoInterface)
 
 install(TARGETS ${LIBRARY_NAME}

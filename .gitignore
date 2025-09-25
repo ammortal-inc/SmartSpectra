@@ -1,3 +1,5 @@
 # Swift
 
 **/*.build/
+*/build/
+**/build/

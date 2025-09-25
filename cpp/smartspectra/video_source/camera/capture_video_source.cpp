@@ -387,5 +387,201 @@ InputTransformMode CaptureCameraSource::GetDefaultInputTransformMode() {
     return InputTransformMode::MirrorHorizontal;
 }
 
+#ifdef HAVE_PYLON_SDK
+// PylonCameraSource implementation
+absl::Status PylonCameraSource::Initialize(const VideoSourceSettings& settings) {
+    MP_RETURN_IF_ERROR(VideoSource::Initialize(settings));
+    
+    // Configure horizontal mirroring
+    if (settings.input_transform_mode == InputTransformMode::MirrorHorizontal) {
+        this->flip_horizontal = false;  // Counter-intuitive like OpenCV
+    }
+    
+    // Convert settings to Pylon format
+    MP_RETURN_IF_ERROR(ConvertSettingsToPylon(settings));
+    
+    // Create and initialize Pylon camera
+    pylon_camera_ = std::make_unique<presage::camera::pylon::PylonCamera>();
+    
+    // Discover cameras and select the appropriate one
+    presage::camera::pylon::PylonCameraManager manager;
+    
+    if (!settings.pylon_camera_serial.empty()) {
+        // Select camera by serial number
+        auto camera_info_or_error = manager.GetCameraInfoBySerial(settings.pylon_camera_serial);
+        if (!camera_info_or_error.ok()) {
+            return camera_info_or_error.status();
+        }
+        camera_info_ = camera_info_or_error.value();
+    } else {
+        // Select camera by device index
+        auto camera_info_or_error = manager.GetCameraInfo(settings.device_index);
+        if (!camera_info_or_error.ok()) {
+            return camera_info_or_error.status();
+        }
+        camera_info_ = camera_info_or_error.value();
+    }
+    
+    LOG(INFO) << "Initializing Pylon camera: " << camera_info_.model_name 
+              << " (SN: " << camera_info_.serial_number << ", IP: " << camera_info_.ip_address << ")";
+    
+    // Initialize the camera
+    auto init_status = pylon_camera_->Initialize(camera_info_, pylon_settings_);
+    if (!init_status.ok()) {
+        return init_status;
+    }
+    
+    // Start acquisition
+    auto start_status = pylon_camera_->StartAcquisition();
+    if (!start_status.ok()) {
+        return start_status;
+    }
+    
+    LOG(INFO) << "Pylon camera initialized successfully - Resolution: " << GetWidth() << "x" << GetHeight();
+    return absl::OkStatus();
+}
+
+bool PylonCameraSource::SupportsExactFrameTimestamp() const {
+    return false;  // For now, use wall clock time
+}
+
+int64_t PylonCameraSource::GetFrameTimestamp() const {
+    return last_frame_timestamp_us_;
+}
+
+absl::Status PylonCameraSource::ConvertSettingsToPylon(const VideoSourceSettings& settings) {
+    // Set image size
+    if (settings.capture_width_px > 0 && settings.capture_height_px > 0) {
+        pylon_settings_.width = settings.capture_width_px;
+        pylon_settings_.height = settings.capture_height_px;
+    }
+    
+    // Set pixel format from Pylon-specific settings
+    pylon_settings_.pixel_format = settings.pylon_pixel_format;
+    
+    // Set frame rate if specified
+    if (settings.max_fps > 0) {
+        pylon_settings_.frame_rate = settings.max_fps;
+    }
+    
+    // Set exposure settings from Pylon-specific settings
+    pylon_settings_.auto_exposure = settings.pylon_auto_exposure;
+    if (settings.pylon_exposure_time_us > 0) {
+        pylon_settings_.exposure_time = settings.pylon_exposure_time_us;
+    }
+    
+    // Set gain if specified
+    if (settings.pylon_gain > 0) {
+        // Store gain setting for later use (would need to be implemented in PylonCamera class)
+    }
+    
+    // Set GigE specific settings
+    pylon_settings_.packet_size = settings.pylon_packet_size;
+    pylon_settings_.packet_delay = settings.pylon_packet_delay;
+    pylon_settings_.num_buffers = settings.pylon_buffer_count;
+    
+    return absl::OkStatus();
+}
+
+void PylonCameraSource::ProducePreTransformFrame(cv::Mat& frame) {
+    LOG(INFO) << "Producing pre-transform frame from Pylon camera...";
+    if (!pylon_camera_) {
+        frame = cv::Mat();
+        return;
+    }
+    
+    auto frame_or_error = pylon_camera_->GrabFrame(5000);  // 5 second timeout
+    if (!frame_or_error.ok()) {
+        LOG(WARNING) << "Failed to grab frame from Pylon camera: " << frame_or_error.status().message();
+        frame = cv::Mat();
+        return;
+    }
+    
+    frame = frame_or_error.value();
+    last_frame_timestamp_us_ = GetCurrentTimestamp();
+    
+    // Apply horizontal flip if needed
+    if (flip_horizontal) {
+        cv::flip(frame, frame, 1);
+    }
+}
+
+int64_t PylonCameraSource::GetCurrentTimestamp() const {
+    return std::chrono::duration_cast<std::chrono::microseconds>(
+        std::chrono::system_clock::now().time_since_epoch()
+    ).count();
+}
+
+int PylonCameraSource::GetWidth() {
+    if (!pylon_camera_) return -1;
+    return pylon_camera_->GetWidth();
+}
+
+int PylonCameraSource::GetHeight() {
+    if (!pylon_camera_) return -1;
+    return pylon_camera_->GetHeight();
+}
+
+bool PylonCameraSource::SupportsExposureControls() {
+    return true;  // Pylon cameras generally support exposure controls
+}
+
+absl::Status PylonCameraSource::TurnOnAutoExposure() {
+    if (!pylon_camera_) {
+        return absl::FailedPreconditionError("Pylon camera not initialized");
+    }
+    
+    pylon_settings_.auto_exposure = true;
+    return absl::OkStatus();  // TODO: Implement actual Pylon camera control
+}
+
+absl::Status PylonCameraSource::TurnOffAutoExposure() {
+    if (!pylon_camera_) {
+        return absl::FailedPreconditionError("Pylon camera not initialized");
+    }
+    
+    pylon_settings_.auto_exposure = false;
+    return absl::OkStatus();  // TODO: Implement actual Pylon camera control
+}
+
+absl::Status PylonCameraSource::ToggleAutoExposure() {
+    pylon_settings_.auto_exposure = !pylon_settings_.auto_exposure;
+    return pylon_settings_.auto_exposure ? TurnOnAutoExposure() : TurnOffAutoExposure();
+}
+
+absl::StatusOr<bool> PylonCameraSource::IsAutoExposureOn() {
+    return pylon_settings_.auto_exposure;
+}
+
+absl::Status PylonCameraSource::IncreaseExposure() {
+    if (!pylon_camera_) {
+        return absl::FailedPreconditionError("Pylon camera not initialized");
+    }
+    
+    if (pylon_settings_.exposure_time > 0) {
+        pylon_settings_.exposure_time += exposure_step_us;
+        // TODO: Apply to actual camera
+    }
+    
+    return absl::OkStatus();
+}
+
+absl::Status PylonCameraSource::DecreaseExposure() {
+    if (!pylon_camera_) {
+        return absl::FailedPreconditionError("Pylon camera not initialized");
+    }
+    
+    if (pylon_settings_.exposure_time > exposure_step_us) {
+        pylon_settings_.exposure_time -= exposure_step_us;
+        // TODO: Apply to actual camera
+    }
+    
+    return absl::OkStatus();
+}
+
+InputTransformMode PylonCameraSource::GetDefaultInputTransformMode() {
+    return InputTransformMode::MirrorHorizontal;  // Match behavior of other cameras
+}
+#endif // HAVE_PYLON_SDK
 
 } // namespace presage::smartspectra::video_source::capture

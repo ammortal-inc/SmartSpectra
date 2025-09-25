@@ -268,6 +268,84 @@ export SMARTSPECTRA_API_KEY=YOUR_KEY
 rest_continuous_example --also_log_to_stderr --camera_device_index=0 --auto_lock=false --api_key=YOUR_API_KEY_HERE
 ```
 
+## Basler GigE Camera Support
+
+The SmartSpectra C++ SDK includes support for **Basler GigE Vision and USB3 Vision cameras** via the Pylon SDK. This enables high-quality, professional-grade camera integration for demanding applications.
+
+### Prerequisites for Basler Cameras
+
+1. **Install Pylon SDK**: Download and install the [Basler Pylon Camera Software Suite](https://www.baslerweb.com/en/software/pylon/) for your platform.
+
+2. **Linux Installation** (recommended path):
+   ```shell
+   # Download pylon SDK from Basler website, then:
+   sudo dpkg -i pylon_*_amd64.deb  # For Ubuntu/Debian
+   sudo apt-get install -f         # Fix any dependencies
+   ```
+
+3. **Verify Installation**:
+   ```shell
+   # Test that your Basler camera is detected
+   /opt/pylon/bin/pylonviewer &
+   ```
+
+### Configuration
+
+The SDK automatically detects Basler cameras when available. You can configure Pylon-specific settings:
+
+```cpp
+// Configure for Basler camera
+settings.video_source.pylon_camera_serial = "12345678";     // Select specific camera by serial
+settings.video_source.pylon_pixel_format = "RGB8";         // Pixel format
+settings.video_source.pylon_exposure_time_us = 10000;      // 10ms exposure (auto if -1)
+settings.video_source.pylon_auto_exposure = true;          // Enable auto exposure
+settings.video_source.pylon_packet_size = 1500;            // GigE packet size (auto if -1)
+settings.video_source.pylon_packet_delay = 1000;           // Inter-packet delay
+settings.video_source.pylon_buffer_count = 10;             // Number of buffers
+
+// Standard settings still apply
+settings.video_source.capture_width_px = 1920;
+settings.video_source.capture_height_px = 1080;
+settings.video_source.max_fps = 30.0;
+```
+
+### Camera Selection Priority
+
+1. **By Serial Number**: If `pylon_camera_serial` is specified, that camera is selected
+2. **By Device Index**: If Pylon cameras are detected, they're indexed starting from the highest device indices
+3. **Fallback**: If no Pylon cameras match the criteria, standard V4L2/OpenCV cameras are used
+
+### Network Configuration (GigE Cameras)
+
+For optimal GigE camera performance:
+
+```shell
+# Increase network buffer sizes
+echo 'net.core.rmem_max = 134217728' | sudo tee -a /etc/sysctl.conf
+echo 'net.core.rmem_default = 131072' | sudo tee -a /etc/sysctl.conf
+sudo sysctl -p
+
+# Set MTU for your network interface (adjust interface name)
+sudo ip link set dev eth0 mtu 9000  # Enable jumbo frames if supported
+```
+
+### Supported Features
+
+- **Multi-camera support**: Select cameras by serial number or device index
+- **GigE Vision**: Full support including packet size optimization
+- **USB3 Vision**: High-speed USB camera support  
+- **Format conversion**: Automatic conversion from Pylon formats to OpenCV Mat
+- **Exposure control**: Manual and automatic exposure with existing SDK controls
+- **High resolutions**: Support for megapixel cameras up to sensor limits
+- **Professional features**: Access to gain, exposure, trigger modes via Pylon-specific settings
+
+### Troubleshooting
+
+- **"No Pylon cameras found"**: Verify Pylon SDK installation and camera connection
+- **Poor performance**: Check network configuration for GigE cameras
+- **Build errors**: Ensure `HAVE_PYLON_SDK` is defined and Pylon libraries are linked
+- **Permission issues**: Add user to `pylon` group: `sudo usermod -a -G pylon $USER`
+
 ## Supported Systems & Architectures
 
 We currently publicly provide SDK dependency packages only for **Ubuntu 22.04 and Mint 21 Linux** distributions running

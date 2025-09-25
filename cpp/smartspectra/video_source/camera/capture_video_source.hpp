@@ -11,6 +11,7 @@
 // === local includes (if any) ===
 #include <smartspectra/video_source/video_source.hpp>
 #include <smartspectra/video_source/settings.hpp>
+#include "camera_pylon.hpp"
 
 
 namespace presage::smartspectra::video_source::capture {
@@ -70,5 +71,40 @@ private:
     bool flip_horizontal = true;
     int exposure_step = 10;
 };
+
+#ifdef HAVE_PYLON_SDK
+class PylonCameraSource : public VideoSource {
+public:
+    absl::Status Initialize(const VideoSourceSettings& settings) override;
+    bool SupportsExactFrameTimestamp() const override;
+    int64_t GetFrameTimestamp() const override;
+
+    absl::Status TurnOnAutoExposure() override;
+    absl::Status TurnOffAutoExposure() override;
+    absl::Status ToggleAutoExposure() override;
+    absl::StatusOr<bool> IsAutoExposureOn() override;
+    absl::Status IncreaseExposure() override;
+    absl::Status DecreaseExposure() override;
+    bool SupportsExposureControls() override;
+    InputTransformMode GetDefaultInputTransformMode() override;
+
+    int GetWidth() override;
+    int GetHeight() override;
+
+protected:
+    void ProducePreTransformFrame(cv::Mat& frame) override;
+
+private:
+    std::unique_ptr<presage::camera::pylon::PylonCamera> pylon_camera_;
+    presage::camera::pylon::PylonCameraInfo camera_info_;
+    presage::camera::pylon::PylonCameraSettings pylon_settings_;
+    int64_t last_frame_timestamp_us_;
+    bool flip_horizontal = true;
+    double exposure_step_us = 1000.0;  // 1ms step for exposure adjustment
+
+    absl::Status ConvertSettingsToPylon(const VideoSourceSettings& settings);
+    int64_t GetCurrentTimestamp() const;
+};
+#endif // HAVE_PYLON_SDK
 
 } // namespace presage::smartspectra::video_source::capture

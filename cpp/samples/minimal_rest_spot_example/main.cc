@@ -12,6 +12,12 @@ int main(int argc, char** argv) {
     settings::Settings<settings::OperationMode::Spot, settings::IntegrationMode::Rest> settings;
     settings.integration.api_key = "YOUR_API_KEY_HERE";
     settings.spot.spot_duration_s = 30;
+    
+    // Optional: Configure for Basler GigE camera (comment out to use default camera)
+    // settings.video_source.pylon_camera_serial = "12345678";  // Your camera's serial number
+    // settings.video_source.pylon_pixel_format = "RGB8";
+    // settings.video_source.pylon_auto_exposure = true;
+    // settings.video_source.max_fps = 30.0;
 
     spectra::container::SpotRestForegroundContainer<DeviceType::Cpu> container(settings);
     auto status = container.SetOnCoreMetricsOutput(

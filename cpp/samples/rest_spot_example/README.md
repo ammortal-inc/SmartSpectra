@@ -33,7 +33,19 @@ cmake --build build --target rest_spot_example
 ./build/samples/rest_spot_example/rest_spot_example --also_log_to_stderr --input_video_path=/path/to/video.mp4 --api_key=YOUR_API_KEY_HERE
 
 # Run with custom measurement duration (60 seconds)
-./build/samples/rest_spot_example/rest_spot_example --also_log_to_stderr --camera_device_index=0 --spot_duration_s=60 --api_key=YOUR_API_KEY_HERE
+./build/samples/rest_spot_example/rest_spot_example --also_log_to_stderr --camera_device_index=0 --spot_duration=60.0 --api_key=YOUR_API_KEY_HERE
+
+# Run with Basler GigE camera (requires Pylon SDK)
+./build/samples/rest_spot_example/rest_spot_example --also_log_to_stderr --pylon_camera_serial=12345678 --api_key=YOUR_API_KEY_HERE
+
+# Run with high-resolution Basler camera
+./build/samples/rest_spot_example/rest_spot_example --also_log_to_stderr \
+  --pylon_camera_serial=12345678 \
+  --capture_width_px=2048 \
+  --capture_height_px=1536 \
+  --pylon_packet_size=9000 \
+  --spot_duration=45.0 \
+  --api_key=YOUR_API_KEY_HERE
 ```
 
 ## Configuration
@@ -41,10 +53,37 @@ cmake --build build --target rest_spot_example
 Key configuration options include:
 
 - `--api_key`: Your Physiology REST API key (required)
-- `--spot_duration_s`: Duration of measurement in seconds (default: 30)
+- `--spot_duration`: Duration of measurement in seconds (default: 30)
 - `--camera_device_index`: Camera to use for input (default: 0)
 - `--input_video_path`: Path to video file for processing
 - `--output_file_path`: Path for output files
+
+## Basler Camera Support
+
+This example supports **Basler GigE Vision and USB3 Vision cameras** via the Pylon SDK:
+
+### Prerequisites
+- Install [Basler Pylon Camera Software Suite](https://www.baslerweb.com/en/software/pylon/)
+- Verify camera connection: `/opt/pylon/bin/pylonviewer`
+
+### Pylon Camera Configuration
+Use the same Pylon-specific flags as the continuous example:
+- `--pylon_camera_serial=SERIAL` - Select specific camera
+- `--pylon_exposure_time_us=TIME` - Manual exposure control  
+- `--pylon_packet_size=SIZE` - Optimize GigE performance
+- `--max_fps=FPS` - Set maximum frame rate
+
+### Example for High-Resolution Spot Measurements
+```bash
+# 2MP measurement with optimized settings
+./rest_spot_example \
+  --pylon_camera_serial=12345678 \
+  --capture_width_px=1920 --capture_height_px=1200 \
+  --pylon_packet_size=9000 \
+  --pylon_auto_exposure=true \
+  --spot_duration=45.0 \
+  --api_key=YOUR_KEY
+```
 
 For complete options, run:
 
