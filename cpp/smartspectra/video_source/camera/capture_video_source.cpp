@@ -504,6 +504,8 @@ void PylonCameraSource::ProducePreTransformFrame(cv::Mat& frame) {
     if (flip_horizontal) {
         cv::flip(frame, frame, 1);
     }
+    LOG(INFO) << "Frame grabbed successfully from Pylon camera - size: " 
+              << frame.cols << "x" << frame.rows << ", channels: " << frame.channels();    
 }
 
 int64_t PylonCameraSource::GetCurrentTimestamp() const {

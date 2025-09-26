@@ -10,7 +10,7 @@ int main(int argc, char** argv) {
     FLAGS_alsologtostderr = true;
 
     settings::Settings<settings::OperationMode::Spot, settings::IntegrationMode::Rest> settings;
-    settings.integration.api_key = "YOUR_API_KEY_HERE";
+    settings.integration.api_key = "TWDFSJwOO06FMZNmaW9vk6QERqAw15yG26o72ggh";
     settings.spot.spot_duration_s = 30;
     
     // Optional: Configure for Basler GigE camera (comment out to use default camera)

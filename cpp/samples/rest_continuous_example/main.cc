@@ -152,8 +152,10 @@ ABSL_FLAG(bool, enable_framerate_diagnostics, false, "If true, enable framerate 
 // endregion ===========================================================================================================
 
 struct HudLayout {
-    int hud_width = 1260;
-    int hud_height = 400;
+    // int hud_width = 1260;
+    // int hud_height = 400;
+    int hud_width = 700;
+    int hud_height = 200;
     int hud_left_margin = 10;
     int additional_plotters_width = 910;
     int telemetry_indicator_x = 1200;
@@ -180,7 +182,9 @@ HudLayout GetHudLayout(bool portrait_mode) {
         };
     } else {
         // assume 1280 x 720 px area is available (adjust as needed)
-        return {1260, 400, 10, 910, 1200, 580, 920, 565, 650, 880, 635};
+        // but we only have 720 x 540 so make adjustments as needed ...
+        // return {1260, 400, 10, 910, 1200, 580, 920, 565, 650, 880, 635};
+        return {700, 200, 10, 500, 200, 380, 420, 465, 450, 580, 500};
     }
 }
 
@@ -313,27 +317,54 @@ absl::Status RunRestContinuousEdge(
                 &effective_core_latency_indicator, &effective_core_latency_label, &effective_core_latency]
                 (cv::Mat& output_frame, int64_t timestamp_milliseconds) {
                 auto status = hud.Render(output_frame);
-                if (!status.ok()) { return status; }
+                if (!status.ok()) { 
+                    LOG(ERROR) << "Failed to render HUD: " << status.message();
+                    return status; 
+                }
                 if (enable_edge_metrics) {
                     const auto edge_color = cv::Scalar(0, 165, 255);
                     status = edge_chest_breathing_plotter.Render(output_frame, edge_color);
-                    if (!status.ok()) { return status; }
+                    if (!status.ok()) {
+                        LOG(ERROR) << "Failed to render edge chest breathing plot: " << status.message();
+                        return status;
+                    }
                     status = edge_chest_breathing_label.Render(output_frame, edge_color);
-                    if (!status.ok()) { return status; }
+                    if (!status.ok()) {
+                        LOG(ERROR) << "Failed to render edge chest breathing label: " << status.message();
+                        return status;
+                    }
                     if(hud_portrait_mode){
                         status = edge_abdomen_breathing_plotter.Render(output_frame, edge_color);
-                        if (!status.ok()) { return status; }
+                        if (!status.ok()) {
+                            LOG(ERROR) << "Failed to render edge abdomen breathing plot: " << status.message();
+                            return status;
+                        }
                         status = edge_abdomen_breathing_label.Render(output_frame, edge_color);
-                        if (!status.ok()) { return status; }
+                        if (!status.ok()) {
+                            LOG(ERROR) << "Failed to render edge abdomen breathing label: " << status.message();
+                            return status;
+                        }
                         if (enable_micromotion){
                             status = edge_glute_mm_plotter.Render(output_frame, edge_color);
-                            if (!status.ok()) { return status; }
+                            if (!status.ok()) {
+                                LOG(ERROR) << "Failed to render edge glute micromotion plot: " << status.message();
+                                return status;
+                            }
                             status = edge_glute_mm_label.Render(output_frame, edge_color);
-                            if (!status.ok()) { return status; }
+                            if (!status.ok()) {
+                                LOG(ERROR) << "Failed to render edge glute micromotion label: " << status.message();
+                                return status;
+                            }
                             status = edge_knee_mm_plotter.Render(output_frame, edge_color);
-                            if (!status.ok()) { return status; }
+                            if (!status.ok()) {
+                                LOG(ERROR) << "Failed to render edge knee micromotion plot: " << status.message();
+                                return status;
+                            }
                             status = edge_knee_mm_labels.Render(output_frame, edge_color);
-                            if (!status.ok()) { return status; }
+                            if (!status.ok()) {
+                                LOG(ERROR) << "Failed to render edge knee micromotion labels: " << status.message();
+                                return status;
+                            }
                         }
                     }
                 }
@@ -341,14 +372,26 @@ absl::Status RunRestContinuousEdge(
                     const auto diagnostics_color = cv::Scalar(40, 200, 0);
                     status = effective_core_fps_indicator
                         .Render(output_frame, effective_core_throughput, diagnostics_color);
-                    if (!status.ok()) { return status; }
+                    if (!status.ok()) {
+                        LOG(ERROR) << "Failed to render effective core fps indicator: " << status.message();
+                        return status;
+                    }
                     status = effective_core_fps_label.Render(output_frame, diagnostics_color);
-                    if (!status.ok()) { return status; }
+                    if (!status.ok()) {
+                        LOG(ERROR) << "Failed to render effective core fps label: " << status.message();
+                        return status;
+                    }
                     status = effective_core_latency_indicator
                         .Render(output_frame, effective_core_latency, diagnostics_color);
-                    if (!status.ok()) { return status; }
+                    if (!status.ok()) {
+                        LOG(ERROR) << "Failed to render effective core latency indicator: " << status.message();
+                        return status;
+                    }
                     status = effective_core_latency_label.Render(output_frame, diagnostics_color);
-                    if (!status.ok()) { return status; }
+                    if (!status.ok()) {
+                        LOG(ERROR) << "Failed to render effective core latency label: " << status.message();
+                        return status;
+                    }
                 }
                 return absl::OkStatus();
             }
@@ -461,6 +504,7 @@ absl::Status RunRestContinuousEdge(
         output_file.close();
     }
 
+    LOG(INFO) << "=== CONTAINER GOING OUT OF SCOPE ===";
     return absl::OkStatus();
 }
 
