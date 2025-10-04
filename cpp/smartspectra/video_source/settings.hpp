@@ -43,6 +43,7 @@ struct VideoSourceSettings {
     camera::CaptureCodec codec = camera::CaptureCodec::MJPG;
     bool auto_lock = true;
     InputTransformMode input_transform_mode = InputTransformMode::None;
+    double max_fps = -1.0;  // -1.0 means use camera default
 
     // === video file, priority #1, unless path empty
     std::string input_video_path;
@@ -68,6 +69,16 @@ struct VideoSourceSettings {
      * @details loop=true is incompatible with erase_read_files=true argument.
      */
     bool loop = false;
+    
+    // === Pylon camera specific settings (ignored for other camera types) ===
+    std::string pylon_camera_serial;      // Select specific Pylon camera by serial number
+    std::string pylon_pixel_format = "RGB8";  // Pixel format for Pylon cameras
+    double pylon_exposure_time_us = -1.0; // Exposure time in microseconds, -1.0 = auto
+    bool pylon_auto_exposure = true;      // Enable automatic exposure
+    double pylon_gain = -1.0;             // Camera gain, -1.0 = auto
+    int pylon_packet_size = -1;           // GigE packet size, -1 = auto
+    int pylon_packet_delay = -1;          // GigE inter-packet delay, -1 = auto
+    int pylon_buffer_count = 5;           // Number of acquisition buffers
 };
 
 } // namespace presage::smartspectra::video_source

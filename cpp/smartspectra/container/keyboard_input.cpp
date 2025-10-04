@@ -28,13 +28,17 @@ absl::Status HandleKeyboardInput(
         switch (pressed_key) {
             case 'q':
             case 27:  // ESC
+                LOG(INFO) << "User requested exit.";
                 grab_frames = false;
                 break;
             case 'e':
+                LOG(INFO) << "Toggling auto-exposure.";
                 return v_source.ToggleAutoExposure();
             case '-':
+                LOG(INFO) << "Decreasing exposure.";
                 return v_source.DecreaseExposure();
             case '=':
+                LOG(INFO) << "Increasing exposure.";
                 return v_source.IncreaseExposure();
             case 's':
                 if (status.value() == StatusCode::OK || status.value() == StatusCode::PROCESSING_NOT_STARTED) {
@@ -48,11 +52,13 @@ absl::Status HandleKeyboardInput(
                     if (recording) {
                         // lock exposure when recording commences (if it's supported by this video source)
                         if (settings.video_source.auto_lock && v_source.SupportsExposureControls()) {
+                            LOG(INFO) << "Locking auto-exposure.";
                             return v_source.TurnOffAutoExposure();
                         }
                     } else {
                         // turn on auto-exposure after recording (if it's supported by this video source)
                         if (settings.video_source.auto_lock && v_source.SupportsExposureControls()) {
+                            LOG(INFO) << "Turning on auto-exposure.";
                             return v_source.TurnOnAutoExposure();
                         }
                     }

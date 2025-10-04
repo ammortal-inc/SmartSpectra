@@ -381,7 +381,7 @@ absl::Status ForegroundContainer<TDeviceType, TOperationMode, TIntegrationMode>:
                     // Otherwise, start recording iff status code is OK
                     if (!this->recording && this->status.value() == physiology::StatusCode::OK) {
                         if (this->settings.video_source.auto_lock && this->video_source->SupportsExposureControls()) {
-                            return this->video_source->TurnOffAutoExposure();
+                            MP_RETURN_IF_ERROR(this->video_source->TurnOffAutoExposure());
                         }
                         this->recording = true;
                         LOG(INFO) << "====== Recording started after timestamp:" << frame_timestamp << " ======";

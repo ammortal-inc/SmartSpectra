@@ -36,6 +36,30 @@ Before running, make sure to set your API key in the source code:
 settings.integration.api_key = "YOUR_API_KEY_HERE";
 ```
 
+## Basler Camera Support
+
+To use a **Basler GigE Vision or USB3 Vision camera**, uncomment and configure the Pylon settings in the source code:
+
+```cpp
+// Optional: Configure for Basler GigE camera
+settings.video_source.pylon_camera_serial = "12345678";  // Your camera's serial number
+settings.video_source.pylon_pixel_format = "RGB8";
+settings.video_source.pylon_auto_exposure = true;
+settings.video_source.max_fps = 30.0;
+
+// Advanced GigE optimization (optional)
+settings.video_source.pylon_packet_size = 9000;
+settings.video_source.pylon_packet_delay = 1000;
+settings.video_source.capture_width_px = 1920;
+settings.video_source.capture_height_px = 1080;
+```
+
+### Prerequisites
+- Install [Basler Pylon Camera Software Suite](https://www.baslerweb.com/en/software/pylon/)
+- Find your camera's serial number: `/opt/pylon/bin/pylonviewer`
+
+The SDK will automatically detect and use the configured Basler camera instead of the default system camera.
+
 ## Code Structure
 
 The example consists of a single `main.cc` file that:

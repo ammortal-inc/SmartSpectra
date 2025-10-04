@@ -68,6 +68,13 @@ target_include_directories(${LIBRARY_NAME} PUBLIC
 
 target_link_libraries(${LIBRARY_NAME} PUBLIC SmartSpectra::VideoSource_Camera SmartSpectra::VideoSource_FileStream)
 
+# Add Pylon SDK support if available
+if (HAVE_PYLON_SDK)
+    target_include_directories(${LIBRARY_NAME} PRIVATE ${PYLON_INCLUDE_DIRS})
+    target_link_libraries(${LIBRARY_NAME} PRIVATE ${PYLON_LIBRARIES})
+    target_compile_definitions(${LIBRARY_NAME} PRIVATE HAVE_PYLON_SDK)
+endif ()
+
 install(TARGETS ${LIBRARY_NAME}
         EXPORT ${PROJECT_NAME}Targets
         FILE_SET HEADERS

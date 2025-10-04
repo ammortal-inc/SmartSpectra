@@ -1,3 +1,6 @@
-# Swift
+# cpp
 
 **/*.build/
+*/build/
+**/build/
+**/core.*
